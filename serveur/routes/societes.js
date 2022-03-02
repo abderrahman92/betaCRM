@@ -6,7 +6,7 @@ route.get('/',(req,res)=>{
     connect.query('SELECT * FROM `societe`  ',(err,rows)=>{
         if (err) throw err;
         console.log(rows);
-        res.send(rows)
+        res.json(rows)
  
     })
 })

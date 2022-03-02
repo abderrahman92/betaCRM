@@ -16,11 +16,15 @@ import statusCards from '../assets/JsonData/status-card-data.json'
 
 const chartOptions = {
     series: [{
-        name: 'Online Customers',
+        name: 'nombre action ',
         data: [40,70,20,90,36,80,30,91,60]
+    },
+    {
+        name: 'nombre adherent ajouté ',
+        data: [20,40,50,10,46,20,80,71,30]
     }, {
-        name: 'Store Customers',
-        data: [40, 30, 70, 80, 40, 16, 40, 20, 51, 10]
+        name: 'nombre contrat signé',
+        data: [40, 30, 20, 60, 40, 16, 40, 20, 51]
     }],
     options: {
         color: ['#6ab04c', '#2980b9'],
@@ -48,34 +52,34 @@ const chartOptions = {
 const topCustomers = {
     head: [
         'user',
-        'total orders',
-        'total spending'
+        "nombre d'action",
+        'classement'
     ],
     body: [
         {
-            "username": "john doe",
-            "order": "490",
-            "price": "$15,870"
+            "username": "celine iacobelli",
+            "order": "4",
+            "price": "1"
         },
         {
-            "username": "frank iva",
-            "order": "250",
-            "price": "$12,251"
+            "username": "jean-luck",
+            "order": "2",
+            "price": "2"
+        },
+        {
+            "username": "naima hamdoun",
+            "order": "2",
+            "price": "3"
+        },
+        {
+            "username": "rim meftah",
+            "order": "2",
+            "price": "4"
         },
         {
             "username": "anthony baker",
-            "order": "120",
-            "price": "$10,840"
-        },
-        {
-            "username": "frank iva",
-            "order": "110",
-            "price": "$9,251"
-        },
-        {
-            "username": "anthony baker",
-            "order": "80",
-            "price": "$8,840"
+            "order": "1",
+            "price": "5"
         }
     ]
 }

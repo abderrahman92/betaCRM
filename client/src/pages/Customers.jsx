@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import axios from 'axios';
-
+import Badge from '../components/badge/Badge'
 import Table from '../components/table/Table'
 
 import customerList from '../assets/JsonData/customers-list.json'
@@ -9,23 +9,48 @@ console.log(customerList)
 
 
 function Customers () {
+    
     const[ListTest,SetTest]=useState([]);
-
     useEffect(() =>{
         axios.get("http://localhost:3001/").then((response)=>{
             SetTest(response.data);
+            
         })
-    })
-   
+    },[]);
+    const orderStatus = {
+        "adherent": "warning",
+        "client": "success",
+    }
+    
     const customerTableHead = [
-        '',
-        'name',
-        'email',
-        'phone',
-        'total orders',
-        'total spend',
-        'location'
+        'siret',
+        'nom responsable ',
+        'reference credit ',
+        'numero societes',
+        'opportinites',
+        'numero de contrat',
+        'action',
+        'plus'
     ]
+    
+    const renderHead = (item, index) => <th key={index}>{item}</th>
+    
+    const renderBody = (item, index) => (
+        <tr key={index}>
+            <td>{item.siret}</td>
+            <td>{item.nom_client_soc}</td>    
+            <td>{item.ref_credit_coop}</td>
+            <td>{item.num_soc}</td>
+            <td><Badge type={orderStatus[item.opportunite]} content={item.opportunite}/></td>
+            <td>{item.id_contrat}</td>
+           
+            <td>action</td>
+            <td>plus info</td>
+
+          
+        </tr>
+    )
+    
 
 
     
@@ -40,36 +65,13 @@ function Customers () {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
-                            <tr>
-                                <td>siret</td>
-                                <td>siren</td>
-                                <td>nom client societe</td>
-                                <td>ref credit coop</td>
-                                <td>activité</td>
-                                <td>numero contrat</td>
-                                <td>opportunité</td>
-                                <td>interlocuteur</td>
-                                <td>Actions</td>
-                            </tr>
-                            
-                            {ListTest.map((value,key)=>{
-                                return(
-                                <tr>
-                                    <td>{value.siret}</td>
-                                    <td>{value.siren}</td>
-                                    <td>{value.nom_client_soc}</td>
-                                    <td>{value.ref_credit_coop}</td>
-                                    <td>{value.activite_soc}</td>
-                                    <td>{value.id_contrat}</td>
-                                    <td>{value.opportunité}</td>
-                                    <td>{value.id_interlocuteur}</td>
-                                    <td></td>
-                        
-
-                                </tr>
-                                )
-                            })
-                            }
+                        <Table
+                                limit='9'
+                                headData={customerTableHead}
+                                renderHead={(item, index) => renderHead(item, index)}
+                                bodyData={ListTest}
+                                renderBody={(item, index) => renderBody(item, index)}
+                            />
                         </div>
                     </div>
                 </div>

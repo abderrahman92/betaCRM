@@ -56,7 +56,7 @@ const Table = props => {
                 </table>
             </div>
             {
-                pages > 1 ? (
+                pages >= 0 ? (
                     <div className="table__pagination">
                         {
                             range.map((item, index) => (
