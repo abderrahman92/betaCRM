@@ -1,29 +1,69 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const cors = require('cors');
-
-//exporte config database 
-const connect = require('./config/config.js')
-
-//export route all pages 
-const routers = require('./routes/societes');
+var corsOptions = {
+  origin: "http://localhost:8081"
+};
+app.use(cors(corsOptions));
+// parse requests of content-type - application/json
 app.use(express.json());
-app.use(cors());
-app.use('/',routers)
-const port = process.env.port || 3001
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to authentification application abderrahmane." });
+});
+
+// routes
+require('./routes/auth.routes')(app);
+require('./routes/user.routes')(app);
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
 
 
-//connection database 
-connect.connect(function(err) {
-    if (err) throw err;
-    console.log("Connecté à la base de données MySQL!");
+const db = require("./models");
+const Role = db.role;
+db.sequelize.sync({force: true}).then(() => {
+  console.log('Drop and Resync Db');
+  initial();
+});
+function initial() {
+  Role.create({
+    id: 1,
+    name: "cemeca"
   });
-
-
-
-
-
-app.listen(port ,()=> console.log(`renning in port ${port}`));
-
-
+ 
+  Role.create({
+    id: 2,
+    name: "sofitech"
+  });
+ 
+  Role.create({
+    id: 3,
+    name: "admin_cemaca"
+  });
+  Role.create({
+    id: 4,
+    name: "admin_sofitech"
+  });
+  Role.create({
+    id: 5,
+    name: "super_cemeca"
+  });
+  Role.create({
+    id: 6,
+    name: "super_sofitech"
+  });
+  Role.create({
+    id: 7,
+    name: "super_admin1"
+  });
+  Role.create({
+    id: 8,
+    name: "super_admin2"
+  });
+}
 
