@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+import AuthService from "../../services/auth.service";
 
 import './topnav.css'
 
@@ -14,9 +16,10 @@ import user_image from '../../assets/images/tuat.png'
 
 import user_menu from '../../assets/JsonData/user_menus.json'
 
+
 const curr_user = {
-    display_name: 'Tuat Tran',
-    image: user_image
+    username: 'Tuat Tran',
+
 }
 
 const renderNotificationItem = (item, index) => (
@@ -46,7 +49,20 @@ const renderUserMenu =(item, index) => (
     </Link>
 )
 
-const Topnav = () => {
+const Topnav = props => {
+    const [currentUser, setCurrentUser] = useState(undefined);
+   
+     useEffect(()=>{
+        const user = AuthService.getCurrentUser();
+            if (user){
+                setCurrentUser(user)
+                
+            }
+    
+       
+     },[])
+     console.log(currentUser)
+   
     return (
         <div className='topnav'>
             <div className="topnav__search">
@@ -56,11 +72,26 @@ const Topnav = () => {
             <div className="topnav__right">
                 <div className="topnav__right-item">
                     {/* dropdown here */}
-                    <Dropdown
+                    {currentUser ?(
+                 
+                 <Link>
+                 <div  className="sidebar__item">
+                     <div  className={`sidebar__item-inner`}>
+                     <i className='bx bxs-user-check' ></i>
+                         <span >
+                         {currentUser.username}
+                         </span>
+                     </div>
+                    
+                 </div>
+                 </Link>
+                    ):(
+                        <Dropdown
                         customToggle={() => renderUserToggle(curr_user)}
                         contentData={user_menu}
                         renderItems={(item, index) => renderUserMenu(item, index)}
                     />
+                    )}
                 </div>
                 <div className="topnav__right-item">
                     <Dropdown

@@ -2,32 +2,51 @@
     {
         "display_name": "Dashboard",
         "route": "/",
-        "icon": "bx bx-category-alt"
+        "icon": "bx bx-category-alt",
+        "status":"active"
     },
     {
-        "display_name": "Societes",
-        "route": "/customers",
-        "icon": "bx bxs-bank"
+        "display_name": "Société",
+        "route": "/Societes",
+        "icon": "bx bxs-bank",
+        "status":"active"
     },
     {
-        "display_name": "interlocuteur",
-        "route": "/interlocuter",
-        "icon": "bx bx-user-pin"
+        "display_name": "Interlocuteur",
+        "route": "/Interlocuteurs",
+        "icon": "bx bx-user-pin",
+        "status":"active"
     },
     {
-        "display_name": "contrat",
-        "route": "/contrat",
-        "icon": "bx bxs-book-content"
+        "display_name": "Contrat",
+        "route": "/Contrats",
+        "icon": "bx bxs-book-content",
+        "status":"active"
     },
     {
         "display_name": "Action",
-        "route": "/action",
-        "icon": "bx bx-bar-chart-alt"
+        "route": "/Action",
+        "icon": "bx bx-bar-chart-alt",
+        "status":"active"
     },
     
     {
         "display_name": "Parametre",
-        "route": "/settings",
-        "icon": "bx bx-cog"
-    }
+        "route": "/Parametre",
+        "icon": "bx bx-cog",
+        "status":"active"
+    },
+    {
+      "display_name": "Connexion",
+      "route": "/login",
+      "icon": "bx bx-log-in",
+      "status":"active"
+   },
+   {
+    "display_name": "S'inscrire",
+    "route": "/Register",
+    "icon": "bx bxs-user-plus",
+    "status":"desactive"
+ }
+
 ]
