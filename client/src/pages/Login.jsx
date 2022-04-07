@@ -55,8 +55,12 @@ export default class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.history.push("/profile");
+          this.props.history.push("/");
           window.location.reload();
+          this.setState({
+            message: 'succes connection :)',
+            successful: true
+          });
         },
         error => {
           const resMessage =
@@ -84,9 +88,6 @@ export default class Login extends Component {
       <div className="card card-container">
         <div className="col-sm-12">
           <div className="card" >
-           
-           
-
             <Form
               onSubmit={this.handleLogin}
               ref={c => {

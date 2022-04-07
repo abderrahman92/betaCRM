@@ -6,7 +6,7 @@
         "status":"active"
     },
     {
-        "display_name": "Société",
+        "display_name": "Societes",
         "route": "/Societes",
         "icon": "bx bxs-bank",
         "status":"active"

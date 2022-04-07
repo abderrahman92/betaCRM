@@ -8,20 +8,20 @@ console.log(customerList)
 
 
 
-function Customers () {
+function Societes () {
     
     const[ListTest,SetTest]=useState([]);
     useEffect(() =>{
-        axios.get("http://localhost:3001/").then((response)=>{
+        axios.get("http://localhost:8081/").then((response)=>{
             SetTest(response.data);
             
-        })
+        }) 
     },[]);
     const orderStatus = {
         "adherent": "warning",
         "client": "success",
     }
-    
+     
     const customerTableHead = [
         'siret',
         'nom responsable ',
@@ -80,4 +80,4 @@ function Customers () {
     )
 }
 
-export default Customers
+export default Societes

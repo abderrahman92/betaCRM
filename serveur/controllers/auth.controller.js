@@ -55,7 +55,7 @@ exports.signin = (req, res) => {
   })
     .then(user => {
       if (!user) {
-        return res.status(404).send({ message: "sofitech Not found." });
+        return res.status(404).send({ message: "utilisateur introuvable :(" });
       }
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
@@ -64,24 +64,26 @@ exports.signin = (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Invalid Password!"
+          message: "password!"
         });
       }
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400 // 24 hours
+      });
+      res.status(200).send({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+        accessToken: token,
+        message:'connection etablie avec succées :)'
       });
       var authorities = [];
       user.getRoles().then(roles => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
-        res.status(200).send({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          accessToken: token
-        });
+       
       });
     })
     .catch(err => {
