@@ -22,6 +22,16 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
+  create_historique_auth(username,password,message){
+    return axios.post(API_URL + "historique", {
+      username,
+      password,
+      message
+      
+    });
+
+  }
+
   register(username, email,roles, password,) {
     return axios.post(API_URL + "signup", {
       username,

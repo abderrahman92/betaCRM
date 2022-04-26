@@ -2,6 +2,7 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
+const Historique =db.historique_auth;
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -90,4 +91,24 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
- 
+exports.historique_auth = (req, res) => {
+  
+  // Create a societes
+  const historique = {
+    username: req.body.username,
+    password: req.body.password,
+    message: req.body.message,
+
+  };
+  // Save Tutorial in the database
+  Historique.create(historique)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Tutorial."
+      });
+    });
+};

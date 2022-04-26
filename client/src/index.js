@@ -19,13 +19,13 @@ const store = createStore(
   rootReducer
 )
 
-document.title = 'Tua CRM'
+document.title = 'CRM SOFITECH/CEMECA'
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
+
       <Layout />
-    </React.StrictMode>
+
   </Provider>,
   document.getElementById('root')
 );

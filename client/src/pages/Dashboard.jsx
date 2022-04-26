@@ -167,9 +167,7 @@ const renderOrderBody = (item, index) => (
         </td>
     </tr>
 )
-const logOut = () => {
-    AuthService.logout();
-  };
+
 const Dashboard = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
     useEffect(()=>{
@@ -181,96 +179,96 @@ const Dashboard = () => {
 
     const themeReducer = useSelector(state => state.ThemeReducer.mode)
 
-    return (
-        
-        <div>
-            {currentUser ?(
-                <div>
-                    <h2 className="page-header">Dashboard</h2>
-                    <div className="row">
-                        <div className="col-6">
-                            <div className="row">
-                                {
-                                    statusCards.map((item, index) => (
-                                        <div className="col-6" key={index}>
-                                            <StatusCard
-                                                icon={item.icon}
-                                                count={item.count}
-                                                title={item.title}
-                                            />
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
-                        <div className="col-6">
-                            <div className="card full-height">
-                                {/* chart */}
-                                <Chart
-                                    options={themeReducer === 'theme-mode-dark' ? {
-                                        ...chartOptions.options,
-                                        theme: { mode: 'dark'}
-                                    } : {
-                                        ...chartOptions.options,
-                                        theme: { mode: 'light'}
-                                    }}
-                                    series={chartOptions.series}
-                                    type='line'
-                                    height='100%'
-                                />
-                            </div>
-                        </div>
-                        <div className="col-4">
-                            <div className="card">
-                                <div className="card__header">
-                                    <h3>top customers</h3>
+        return (
+            
+            <div>
+                {currentUser ?(
+                    <div>
+                        <h2 className="page-header">Dashboard</h2>
+                        <div className="row">
+                            <div className="col-6">
+                                <div className="row">
+                                    {
+                                        statusCards.map((item, index) => (
+                                            <div className="col-6" key={index}>
+                                                <StatusCard
+                                                    icon={item.icon}
+                                                    count={item.count}
+                                                    title={item.title}
+                                                />
+                                            </div>
+                                        ))
+                                    }
                                 </div>
-                                <div className="card__body">
-                                    <Table
-                                        headData={topCustomers.head}
-                                        renderHead={(item, index) => renderCusomerHead(item, index)}
-                                        bodyData={topCustomers.body}
-                                        renderBody={(item, index) => renderCusomerBody(item, index)}
+                            </div>
+                            <div className="col-6">
+                                <div className="card full-height">
+                                    {/* chart */}
+                                    <Chart
+                                        options={themeReducer === 'theme-mode-dark' ? {
+                                            ...chartOptions.options,
+                                            theme: { mode: 'dark'}
+                                        } : {
+                                            ...chartOptions.options,
+                                            theme: { mode: 'light'}
+                                        }}
+                                        series={chartOptions.series}
+                                        type='line'
+                                        height='100%'
                                     />
                                 </div>
-                                <div className="card__footer">
-                                    <Link to='/'>view all</Link>
+                            </div>
+                            <div className="col-4">
+                                <div className="card">
+                                    <div className="card__header">
+                                        <h3>top customers</h3>
+                                    </div>
+                                    <div className="card__body">
+                                        <Table
+                                            headData={topCustomers.head}
+                                            renderHead={(item, index) => renderCusomerHead(item, index)}
+                                            bodyData={topCustomers.body}
+                                            renderBody={(item, index) => renderCusomerBody(item, index)}
+                                        />
+                                    </div>
+                                    <div className="card__footer">
+                                        <Link to='/'>view all</Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-8">
-                            <div className="card">
-                                <div className="card__header">
-                                    <h3>latest orders</h3>
-                                </div>
-                                <div className="card__body">
-                                    <Table
-                                        headData={latestOrders.header}
-                                        renderHead={(item, index) => renderOrderHead(item, index)}
-                                        bodyData={latestOrders.body}
-                                        renderBody={(item, index) => renderOrderBody(item, index)}
-                                    />
-                                </div>
-                                <div className="card__footer">
-                                    <Link to='/'>view all</Link>
+                            <div className="col-8">
+                                <div className="card">
+                                    <div className="card__header">
+                                        <h3>latest orders</h3>
+                                    </div>
+                                    <div className="card__body">
+                                        <Table
+                                            headData={latestOrders.header}
+                                            renderHead={(item, index) => renderOrderHead(item, index)}
+                                            bodyData={latestOrders.body}
+                                            renderBody={(item, index) => renderOrderBody(item, index)}
+                                        />
+                                    </div>
+                                    <div className="card__footer">
+                                        <Link to='/'>view all</Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-             ): (
-                <div  className="sidebar__item">
-                    <div  disabled  className={`sidebar__item-inner `}>
-                    <i class='bx bxs-user-x' ></i>
-                        <span >
-                        pas connecter
-                        </span>
+                ): (
+                    <div  className="sidebar__item">
+                        <div  disabled  className={`sidebar__item-inner `}>
+                        <i class='bx bxs-user-x' ></i>
+                            <span >
+                            pas connecter
+                            </span>
+                        </div>
+                        
                     </div>
-                    
-                </div>
-              )}
-        </div>
-    )
-}
+                )}
+            </div>
+        )
+        }
 
 export default Dashboard

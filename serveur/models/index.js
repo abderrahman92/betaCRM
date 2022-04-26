@@ -20,6 +20,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
+db.historique_auth = require("../models/historique_auth.js")(sequelize, Sequelize);
 db.interlocuteur = require("../models/interlocuteur.model.js")(sequelize, Sequelize);
 db.contrat = require("../models/contrat.model.js")(sequelize, Sequelize);
 db.police = require("../models/police.model.js")(sequelize, Sequelize);

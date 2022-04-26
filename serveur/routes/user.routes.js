@@ -9,16 +9,19 @@ module.exports = function(app) {
     next();
   });
   app.get("/api/test/all", controller.allAccess);
+  //cemeca consultation
   app.get(
-    "/api/test/user",
+    "/api/test/cemeca",
     [authJwt.verifyToken],
-    controller.userBoard
+    controller.cemecaBoard
   );
+  //sofitech consultation
   app.get(
-    "/api/test/mod",
-    [authJwt.verifyToken, authJwt.isModerator],
-    controller.moderatorBoard
+    "/api/test/sofitech",
+    [authJwt.verifyToken, authJwt.isSofitech],
+    controller.sofitechBoard
   );
+  //super admin
   app.get(
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],

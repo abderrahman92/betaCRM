@@ -17,6 +17,9 @@ module.exports =(sequelize,Sequelize)=>{
     message: {
       type: Sequelize.STRING
     },
+    num_easy_coface: {
+      type: Sequelize.STRING
+    },
     ref_credit_cop:Sequelize.STRING
   });
   return Police;

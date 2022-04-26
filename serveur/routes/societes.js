@@ -1,15 +1,14 @@
-const connect = require('../config/config.js');
-const express = require('express');
-const route = express.Router();
 
-route.get('/societes',(req,res)=>{
-    connect.query('SELECT * FROM `societe`  ',(err,rows)=>{
-        if (err) throw err;
-        console.log(rows);
-        res.json(rows)
- 
-    })
-})
+const tutorials = require("../controllers/societe.controllers");
+module.exports = function(app) {
+// Retrieve all Tutorials
+app.get("/admin", tutorials.findAll);
+//route all societe where role is cemeca 
+app.get("/cemeca", tutorials.findAll_cemeca);
+//route all societe where role is sofitech  
+app.get("/sofitech", tutorials.findAll_sofitech);
+//route ajouter societer 
+app.post("/api/auth/ajouter", tutorials.create_societe);
+};
 
-module.exports = route ;
  

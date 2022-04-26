@@ -23,23 +23,24 @@ isAdmin = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
+        if (roles[i].name === "super_admin") {
           next();
           return;
         }
       }
       res.status(403).send({
-        message: "Require Admin Role!"
+        message: "Require Super_admin Admin Role!"
       });
       return;
     });
   });
 };
-isModerator = (req, res, next) => {
+//cemeca role
+isCemeca = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "moderator") {
+        if (roles[i].name === "cemeca") {
           next();
           return;
         }
@@ -50,11 +51,27 @@ isModerator = (req, res, next) => {
     });
   });
 };
+//sofitech role
+isSofitech = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    user.getRoles().then(roles => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "sofitech") {
+          next();
+          return;
+        }
+      }
+      res.status(403).send({
+        message: "Require sifitech Role!"
+      });
+    });
+  });
+};
 isModeratorOrAdmin = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "modifier") {
+        if (roles[i].name === "sofitech") {
           next();
           return;
         }
@@ -72,7 +89,8 @@ isModeratorOrAdmin = (req, res, next) => {
 const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
-  isModerator: isModerator,
+  isCemeca:isCemeca,
+  isSofitech:isSofitech,
   isModeratorOrAdmin: isModeratorOrAdmin
 };
 module.exports = authJwt;

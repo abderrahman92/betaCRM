@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -17,7 +17,7 @@ const required = value => {
   }
 };
 
-const email = value => {
+const vemail = value => {
   if (!isEmail(value)) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -56,102 +56,67 @@ const vpassword = value => {
   }
 };
 
-export default class Register extends Component {
-  constructor(props) {
-    super(props);
-    this.handleRegister = this.handleRegister.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangeRole = this.onChangeRole.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-
-    this.state = {
-      username: "",
-      email: "",
-      password: "",
-      roles:[],
-      successful: false,
-      message: ""
-    };
-  }
-
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value
-    });
-  }
-  onChangeRole(e) {
-    console.log(this.state.roles);
-      this.setState({ roles: [...this.state.roles, e.target.value] })
-  }
-
-
-  onChangeEmail(e) {
-    this.setState({
-      email: e.target.value
-    });
-  }
-
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value
-    });
-  }
-
-  handleRegister(e) {
+const Register = () => {
+  const form = useRef();
+  const checkBtn = useRef();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [roles, setRoles] = useState([]);
+  const [password, setPassword] = useState("");
+  const [successful, setSuccessful] = useState(false);
+  const [message, setMessage] = useState("");
+  const onChangeUsername = (e) => {
+    const username = e.target.value;
+    setUsername(username);
+  };
+  const onChangeEmail = (e) => {
+    const email = e.target.value;
+    setEmail(email);
+  };
+  const onChangePassword = (e) => {
+    const password = e.target.value;
+    setPassword(password);
+  };
+  const onChangeRoles = (e) => {
+    const role = e.target.value;
+    setRoles([...roles,role]);
+  
+  };
+  console.log(roles)
+  const handleRegister = (e) => {
     e.preventDefault();
-
-    this.setState({
-      message: "",
-      successful: false
-    });
-
-    this.form.validateAll();
-
-    if (this.checkBtn.context._errors.length === 0) {
-      AuthService.register(
-        this.state.username,
-        this.state.email,
-        this.state.roles,
-        this.state.password
-      ).then(
-        response => {
-          this.setState({
-            message: response.data.message,
-            successful: true
-          });
-          
+    setMessage("");
+    setSuccessful(false);
+    form.current.validateAll();
+    if (checkBtn.current.context._errors.length === 0) {
+      AuthService.register(username, email,roles, password).then(
+        (response) => {
+          setMessage(response.data.message);
+          setSuccessful(true);
         },
-        error => {
+
+        (error) => {
+            console.log(roles)
           const resMessage =
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
             error.message ||
             error.toString();
-
-          this.setState({
-            successful: false,
-            message: resMessage
-          });
+          setMessage(resMessage);
+          setSuccessful(false);
         }
       );
     }
-  }
-
-  render() {
+  };
+  
     return (
       <div className="col-md-12">
         <div className="card card-container">
          
 
-          <Form
-            onSubmit={this.handleRegister}
-            ref={c => {
-              this.form = c;
-            }}
-          >
-            {!this.state.successful && (
+        <Form onSubmit={handleRegister} ref={form}>
+          {!successful && (
               <div>
                 <div className="form-group">
                   <label htmlFor="username">Username</label>
@@ -159,8 +124,8 @@ export default class Register extends Component {
                     type="text"
                     className="form-control"
                     name="username"
-                    value={this.state.username}
-                    onChange={this.onChangeUsername}
+                    value={username}
+                    onChange={onChangeUsername}
                     validations={[required, vusername]}
                   />
                 </div>
@@ -171,9 +136,9 @@ export default class Register extends Component {
                     type="text"
                     className="form-control"
                     name="email"
-                    value={this.state.email}
-                    onChange={this.onChangeEmail}
-                    validations={[required, email]}
+                    value={email}
+                    onChange={onChangeEmail}
+                    validations={[required, vemail]}
                   />
                 </div>          
                 <div className="form-group">
@@ -182,8 +147,8 @@ export default class Register extends Component {
                     type="password"
                     className="form-control"
                     name="password"
-                    value={this.state.password}
-                    onChange={this.onChangePassword}
+                    value={password}
+                    onChange={onChangePassword}
                     validations={[required, vpassword]}
                   />
                 </div>
@@ -196,7 +161,7 @@ export default class Register extends Component {
                     className="form-check"
                     name="cemeca"
                     value="1"
-                    onChange={this.onChangeRole}
+                    onChange={onChangeRoles}
                     validations={[required, vrole]}
                   />
                   <label className="form-check-label" htmlFor="role">sofitech</label>
@@ -205,7 +170,7 @@ export default class Register extends Component {
                     className="form-check"
                     name="sofitech"
                     value="2"
-                    onChange={this.onChangeRole}
+                    onChange={onChangeRoles}
                     validations={[required, vrole]}
                   />
                   <label className="form-check-label" htmlFor="role">admin cemeca</label>
@@ -214,7 +179,7 @@ export default class Register extends Component {
                     className="form-check"
                     name="admin_cemeca"
                     value="3"
-                    onChange={this.onChangeRole}
+                    onChange={onChangeRoles}
                     validations={[required, vrole]}
                   />
                   <label className="form-check-label" htmlFor="role">admin sofitech</label>
@@ -223,7 +188,7 @@ export default class Register extends Component {
                     className="form-check"
                     name="admin_sofitech"
                     value="4"
-                    onChange={this.onChangeRole}
+                    onChange={onChangeRoles}
                     validations={[required, vrole]}
                   />
                   </div>
@@ -233,7 +198,7 @@ export default class Register extends Component {
                     className="form-check"
                     name="super_cemeca"
                     value="5"
-                    onChange={this.onChangeRole}
+                    onChange={onChangeRoles}
                     validations={[required, vrole]}
                   />
                      <label className="form-check-label" htmlFor="role">super_sofitech</label>
@@ -242,7 +207,7 @@ export default class Register extends Component {
                     className="form-check"
                     name="super_sofitech"
                     value="6"
-                    onChange={this.onChangeRole}
+                    onChange={onChangeRoles}
                     validations={[required, vrole]}
                   />
                     <label className="form-check-label" htmlFor="role">super_admin</label>
@@ -251,7 +216,7 @@ export default class Register extends Component {
                     className="form-check"
                     name="super_admin1"
                     value="7"
-                    onChange={this.onChangeRole}
+                    onChange={onChangeRoles}
                     validations={[required, vrole]}
                   /> 
                    <label className="form-check-label" htmlFor="role">super_admin2</label>
@@ -260,7 +225,7 @@ export default class Register extends Component {
                   className="form-check"
                   name="super_admin2"
                   value="8"
-                  onChange={this.onChangeRole}
+                  onChange={onChangeRoles}
                   validations={[required, vrole]}
                 />
                 </div>
@@ -271,29 +236,25 @@ export default class Register extends Component {
               </div>
             )}
 
-            {this.state.message && (
+            {message && (
               <div className="form-group">
                 <div
                   className={
-                    this.state.successful
+                    successful
                       ? "alert alert-success"
                       : "alert alert-danger"
                   }
                   role="alert"
                 >
-                  {this.state.message}
+                  {message}
                 </div>
               </div>
             )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
-                this.checkBtn = c;
-              }}
-            />
-          </Form>
+              <CheckButton style={{ display: "none" }} ref={checkBtn} />
+        </Form>
         </div>
       </div>
     );
   }
-}
+  export default Register;
+

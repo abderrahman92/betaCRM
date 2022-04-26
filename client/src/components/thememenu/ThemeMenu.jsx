@@ -1,6 +1,7 @@
 import React, {useRef, useState, useEffect} from 'react'
 
 import './thememenu.css'
+import AuthService from "../../services/auth.service";
 
 import { useDispatch } from 'react-redux'
 
@@ -70,6 +71,7 @@ const clickOutsideRef = (content_ref, toggle_ref) => {
 
 const ThemeMenu = () => {
 
+    const user = AuthService.getCurrentUser()
     const menu_ref = useRef(null)
     const menu_toggle_ref = useRef(null)
 
@@ -108,47 +110,61 @@ const ThemeMenu = () => {
 
     }, []);
 
+    if(user){
+        
+    }
+
     return (
+       
         <div>
-            <button ref={menu_toggle_ref} className="dropdown__toggle" onClick={() => setActiveMenu()}>
-                <i className='bx bx-palette'></i>
-            </button>
-            <div ref={menu_ref} className="theme-menu">
-                <h4>Theme settings</h4>
-                <button className="theme-menu__close" onClick={() => closeMenu()}>
-                    <i className='bx bx-x'></i>
-                </button>
-                <div className="theme-menu__select">
-                    <span>Choose mode</span>
-                    <ul className="mode-list">
-                        {
-                            mode_settings.map((item, index) => (
-                                <li key={index} onClick={() => setMode(item)}>
-                                    <div className={`mode-list__color ${item.background} ${item.id === currMode ? 'active' : ''}`}>
-                                        <i className='bx bx-check'></i>
-                                    </div>
-                                    <span>{item.name}</span>
-                                </li>
-                            ))
-                        }
-                    </ul>
+            {user?(
+                <div>
+                     <button ref={menu_toggle_ref} className="dropdown__toggle" onClick={() => setActiveMenu()}>
+                    <i className='bx bx-palette'></i>
+                    </button>
+                    <div ref={menu_ref} className="theme-menu">
+                        <h4>Theme settings</h4>
+                        <button className="theme-menu__close" onClick={() => closeMenu()}>
+                            <i className='bx bx-x'></i>
+                        </button>
+                        <div className="theme-menu__select">
+                            <span>Choose mode</span>
+                            <ul className="mode-list">
+                                {
+                                    mode_settings.map((item, index) => (
+                                        <li key={index} onClick={() => setMode(item)}>
+                                            <div className={`mode-list__color ${item.background} ${item.id === currMode ? 'active' : ''}`}>
+                                                <i className='bx bx-check'></i>
+                                            </div>
+                                            <span>{item.name}</span>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                        <div className="theme-menu__select">
+                            <span>Choose color</span>
+                            <ul className="mode-list">
+                                {
+                                    color_settings.map((item, index) => (
+                                        <li key={index} onClick={() => setColor(item)}>
+                                            <div className={`mode-list__color ${item.background} ${item.id === currColor ? 'active' : ''}`}>
+                                                <i className='bx bx-check'></i>
+                                            </div>
+                                            <span>{item.name}</span>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div className="theme-menu__select">
-                    <span>Choose color</span>
-                    <ul className="mode-list">
-                        {
-                            color_settings.map((item, index) => (
-                                <li key={index} onClick={() => setColor(item)}>
-                                    <div className={`mode-list__color ${item.background} ${item.id === currColor ? 'active' : ''}`}>
-                                        <i className='bx bx-check'></i>
-                                    </div>
-                                    <span>{item.name}</span>
-                                </li>
-                            ))
-                        }
-                    </ul>
+     
+            ):(
+                <div>               
                 </div>
-            </div>
+            )}
+          
         </div>
     )
 }

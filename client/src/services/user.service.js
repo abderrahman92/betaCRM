@@ -8,8 +8,8 @@ class UserService {
     return axios.get(API_URL + 'all');
   }
 
-  getUserBoard() {
-    return axios.get(API_URL + 'user', { headers: authHeader() });
+  getCemecaBoard() {
+    return axios.get(API_URL + 'cemeca', { headers: authHeader() });
   }
   getSofitechBoard() {
     return axios.get(API_URL + 'sofitech', { headers: authHeader() });

@@ -6,6 +6,10 @@ import './sidebar.css'
 
 import AuthService from "../../services/auth.service";
 
+import UserService from "../../services/user.service";
+
+import EventBus from "../../common/EventBus"
+
 import logo from '../../assets/images/sofitech.png'
 
 import sidebar_items from '../../assets/JsonData/sidebar_routes.json'
@@ -27,8 +31,6 @@ const SidebarItedes = props => {
         </div>  
     )
 }
-
-
 //sidabr activation parametres
 const SidebarIteact = props => {
 
@@ -51,19 +53,44 @@ const logOut = () => {
     AuthService.logout();
   };
 const Sidebar = props => {
-   
+
     const active = props.active ? 'active' : '';
     const [new_sidbar,setSidbar]=useState(sidebar_items);
     const [currentUser, setCurrentUser] = useState(undefined);
-    const buttonclickedHandler = nouveau =>{
-        
-    }
-     useEffect(()=>{
-        const user = AuthService.getCurrentUser();
+    const [adminstate, setadminstate] = useState(undefined);
+     useEffect(()=>{ 
+        const user = AuthService.getCurrentUser()
             if (user){
                 const nouveaustate = [...new_sidbar]
-                nouveaustate[6].status = "desactive"
-                nouveaustate[7].status = "active"
+                UserService.getAdminBoard().then(
+                    response => {
+                        nouveaustate[7].status = "desactive"
+                        nouveaustate[2].status = "active"
+                        nouveaustate[8].status = "active"
+                        setadminstate({
+                        content: response.data
+                        
+                      });
+                    },
+                    error => {
+                        setadminstate({
+                        content:
+                          (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                          error.message ||
+                          error.toString()
+                      });
+              
+                      if (error.response && error.response.status === 401) {
+                        EventBus.dispatch("logout");
+                      }
+                    }
+                  );
+                nouveaustate[7].status = "desactive"
+                nouveaustate[0].status = "active"
+                nouveaustate[2].status = "active"
+                nouveaustate[1].status = "active"
                 setSidbar(nouveaustate) 
                 setCurrentUser(user) 
             }
@@ -77,7 +104,7 @@ const Sidebar = props => {
     return (
         <div className='sidebar'>
             <div className="sidebar__logo">
-                <img onClick={buttonclickedHandler} src={logo} alt="company logo" />
+                <img  src={logo} alt="company logo" />
             </div>
             {
                 actItem.map((item, index) => (
@@ -92,39 +119,32 @@ const Sidebar = props => {
                     </Link>
                 ))
             },
-            {
-                desaItem.map((item, index) => (
-                        <SidebarItedes
-                            title={item.display_name}
-                            icon={item.icon}
-                            active={index === activeItem}
-                           
-                        />
-                )) 
-            },{currentUser ?(
+         ,{currentUser ?(
                 <div>
-               
-                <div  className="sidebar__item">
-                    <div  className={`sidebar__item-inner${active}`}>
-                    <i className='bx bxs-log-out'></i>
-                        <a href="/login" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
+                    {
+                        desaItem.map((item, index) => (
+                                <SidebarItedes
+                                    title={item.display_name}
+                                    icon={item.icon}
+                                    active={index === activeItem}
+                                
+                                />
+                        )) 
+                    }
+                    <div  className="sidebar__item">
+                        <div  className={`sidebar__item-inner${active}`}>
+                        <i className='bx bxs-log-out'></i>
+                            <a href="/login" className="nav-link" onClick={logOut}>Déconnexion</a>
+                        </div>
+                    
                     </div>
-                   
-                </div>
                 
                 </div> 
                 
                 
               ): (
                 <div  className="sidebar__item">
-                    <div  disabled  className={`sidebar__item-inner `}>
-                    <i class='bx bxs-user-x' ></i>
-                        <span >
-                        pas connecter
-                        </span>
-                    </div>
+                  
                     
                 </div>
               )}

@@ -6,19 +6,25 @@ module.exports =(sequelize,Sequelize)=>{
       primaryKey: true
     },
     siren: {
-      type: Sequelize.INTEGER
+      type: Sequelize.BIGINT
     },
-    nom_client_soc: {
+    nom_soc: {
       type: Sequelize.STRING
     },
-    annee_soc: {
-      type: Sequelize.INTEGER
+    nom_responsable_soc: {
+      type: Sequelize.STRING
     },
     date_creation_soc: {
       type: Sequelize.DATE
     },
     activite_soc:{
       type:Sequelize.STRING
+    },
+    adresse_local: {
+      type: Sequelize.STRING
+    },
+    pays: {
+      type: Sequelize.STRING
     },
     ville_soc: {
       type: Sequelize.STRING

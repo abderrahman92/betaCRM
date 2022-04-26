@@ -2,34 +2,66 @@ import React,{useEffect,useState} from 'react'
 import axios from 'axios';
 import Badge from '../components/badge/Badge'
 import Table from '../components/table/Table'
-
+import StatusCard from '../components/status-card/statusCard_add.jsx'
+import statusCards from '../assets/JsonData/status-card-add-data.json'
 import customerList from '../assets/JsonData/customers-list.json'
-console.log(customerList)
+import UserService from "../services/user.service";
+import AuthService from "../services/auth.service";
 
 
-
-function Societes () {
+function Customers () {
     
+
     const[ListTest,SetTest]=useState([]);
+    const cemeca = UserService.getCemecaBoard()
+    const sofitech = UserService.getSofitechBoard()
+    const admin = UserService.getAdminBoard()
+    const user = AuthService.getCurrentUser()
     useEffect(() =>{
-        axios.get("http://localhost:8081/").then((response)=>{
-            SetTest(response.data);
-            
-        }) 
+        if(user){
+            //afficher cemca
+            UserService.getCemecaBoard().then(
+                response => {
+                    axios.get("http://localhost:8080/cemeca").then((response)=>{
+                        SetTest(response.data);
+                    })
+                },
+          
+
+                
+              );
+               //afficher cemca
+            UserService.getSofitechBoard().then(
+                response => {
+                    axios.get("http://localhost:8080/sofitech").then((response)=>{
+                        SetTest(response.data);
+                    })
+                },
+          
+
+                
+              );
+              
+        }
+
+        
     },[]);
+       
+  
+    
     const orderStatus = {
         "adherent": "warning",
         "client": "success",
     }
-     
+    
     const customerTableHead = [
-        'siret',
-        'nom responsable ',
-        'reference credit ',
-        'numero societes',
-        'opportinites',
-        'numero de contrat',
-        'action',
+        'siren ',
+        'nom societes',
+        'nom responsable',
+        'telephone',
+        'code postal',
+        'opportunite',
+        'Action', 
         'plus'
     ]
     
@@ -37,17 +69,16 @@ function Societes () {
     
     const renderBody = (item, index) => (
         <tr key={index}>
-            <td>{item.siret}</td>
-            <td>{item.nom_client_soc}</td>    
-            <td>{item.ref_credit_coop}</td>
-            <td>{item.num_soc}</td>
-            <td><Badge type={orderStatus[item.opportunite]} content={item.opportunite}/></td>
-            <td>{item.id_contrat}</td>
-           
-            <td>action</td>
-            <td>plus info</td>
-
-          
+            <td>{item.siren}</td>
+            <td>{item.nom_soc}</td>    
+            <td>{item.nom_responsable_soc}</td>
+            <td>{item.tel}</td>
+            <td>{item.code_postal}</td>
+            <td>{item.opportunite}</td>     
+                
+            <td><a href={item.siren}><button type="button" class="btn btn-success"><i class='bx bx-pencil'></i></button></a></td>
+            <td><a href={item.siren}><button type="button" class="btn btn-light"><i class='bx bx-show'></i></button></a></td>
+ 
         </tr>
     )
     
@@ -59,14 +90,14 @@ function Societes () {
     return (
         <div>
             <h2 className="page-header">
-                customers
+                sociétés
             </h2>
             <div className="row">
                 <div className="col-12">
                     <div className="card">
                         <div className="card__body">
                         <Table
-                                limit='9'
+                                limit='11'
                                 headData={customerTableHead}
                                 renderHead={(item, index) => renderHead(item, index)}
                                 bodyData={ListTest}
@@ -80,4 +111,4 @@ function Societes () {
     )
 }
 
-export default Societes
+export default Customers
