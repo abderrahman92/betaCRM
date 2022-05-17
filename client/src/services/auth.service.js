@@ -31,6 +31,16 @@ class AuthService {
     });
 
   }
+    get_historique_auth(){
+    return axios.get(API_URL + "list_historique");
+
+  };
+  removeAll_historique_auth () {
+    return axios.delete(API_URL +`list_historique`);
+  };
+  remove_historiqueremove(id) {
+    return axios.delete(API_URL +`list_historique/${id}`);
+  };
 
   register(username, email,roles, password,) {
     return axios.post(API_URL + "signup", {

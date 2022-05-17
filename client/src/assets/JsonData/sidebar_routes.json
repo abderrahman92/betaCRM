@@ -1,6 +1,6 @@
 [
     {
-        "display_name": "Dashboard",
+        "display_name": "Tableau de bord",
         "route": "/",
         "icon": "bx bx-category-alt",
         "status":"desactive"
@@ -12,7 +12,7 @@
         "status":"desactive"
     },
     {
-        "display_name": "nouvelle societe",
+        "display_name": "Nouvelle Société",
         "route": "/ajouter",
         "icon": "bx bxs-folder-plus",
         "status":"desactive"

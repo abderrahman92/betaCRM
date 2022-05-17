@@ -1,4 +1,6 @@
-import React, {useEffect,useState} from 'react'
+import React,{useEffect,useState} from 'react'
+
+import axios from 'axios';
 
 import AuthService from "../services/auth.service";
 
@@ -15,6 +17,9 @@ import Table from '../components/table/Table'
 import Badge from '../components/badge/Badge'
 
 import statusCards from '../assets/JsonData/status-card-data.json'
+
+import UserService from "../services/user.service";
+
 
 const chartOptions = {
     series: [{
@@ -51,40 +56,8 @@ const chartOptions = {
     }
 }
 
-const topCustomers = {
-    head: [
-        'user',
-        "nombre d'action",
-        'classement'
-    ],
-    body: [
-        {
-            "username": "celine iacobelli",
-            "order": "4",
-            "price": "1"
-        },
-        {
-            "username": "jean-luck",
-            "order": "2",
-            "price": "2"
-        },
-        {
-            "username": "naima hamdoun",
-            "order": "2",
-            "price": "3"
-        },
-        {
-            "username": "rim meftah",
-            "order": "2",
-            "price": "4"
-        },
-        {
-            "username": "anthony baker",
-            "order": "1",
-            "price": "5"
-        }
-    ]
-}
+
+
 
 const renderCusomerHead = (item, index) => (
     <th key={index}>{item}</th>
@@ -98,52 +71,6 @@ const renderCusomerBody = (item, index) => (
     </tr>
 )
 
-const latestOrders = {
-    header: [
-        "order id",
-        "user",
-        "total price",
-        "date",
-        "status"
-    ],
-    body: [
-        {
-            id: "#OD1711",
-            user: "john doe",
-            date: "17 Jun 2021",
-            price: "$900",
-            status: "shipping"
-        },
-        {
-            id: "#OD1712",
-            user: "frank iva",
-            date: "1 Jun 2021",
-            price: "$400",
-            status: "paid"
-        },
-        {
-            id: "#OD1713",
-            user: "anthony baker",
-            date: "27 Jun 2021",
-            price: "$200",
-            status: "pending"
-        },
-        {
-            id: "#OD1712",
-            user: "frank iva",
-            date: "1 Jun 2021",
-            price: "$400",
-            status: "paid"
-        },
-        {
-            id: "#OD1713",
-            user: "anthony baker",
-            date: "27 Jun 2021",
-            price: "$200",
-            status: "refund"
-        }
-    ]
-}
 
 const orderStatus = {
     "shipping": "primary",
@@ -156,19 +83,12 @@ const renderOrderHead = (item, index) => (
     <th key={index}>{item}</th>
 )
 
-const renderOrderBody = (item, index) => (
-    <tr key={index}>
-        <td>{item.id}</td>
-        <td>{item.user}</td>
-        <td>{item.price}</td>
-        <td>{item.date}</td>
-        <td>
-            <Badge type={orderStatus[item.status]} content={item.status}/>
-        </td>
-    </tr>
-)
+
 
 const Dashboard = () => {
+ 
+    const[ListTest,SetTest]=useState([]);
+    const[Cemeca,SetIscemeca]=useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
     useEffect(()=>{
         const user = AuthService.getCurrentUser();
@@ -176,7 +96,64 @@ const Dashboard = () => {
                 setCurrentUser(user) 
             }
      },[]) 
+     useEffect(() =>{
+        const user = AuthService.getCurrentUser();
+        if(user){
+            //afficher cemca
+            UserService.getCemecaBoard().then(
+                response => {
+                    axios.get("http://localhost:8080/cemeca").then((response)=>{
+                        SetTest(response.data);
+                        SetIscemeca(true)
+                    })
+                },
+          
 
+                
+              );
+               //afficher cemca
+            UserService.getSofitechBoard().then(
+                response => {
+                    axios.get("http://localhost:8080/sofitech").then((response)=>{
+                        SetTest(response.data);
+                    })
+                },
+          
+
+                
+              );
+              
+        }
+
+        
+    },[]);
+    const latestOrders = {
+        header: [
+            "siret",
+            "code naf",
+            "nom responnsable",
+            "tel",
+            "société"
+        ],
+        body: [ListTest]
+    }
+    const renderOrderBody = (item, index) => (
+        <tr key={index}>
+            <td>{item.siret}</td>
+            <td>{item.activite_soc}</td>
+            <td>{item.nom_responsable_soc}</td>
+            
+            <td>{item.tel}</td>
+            {Cemeca? (
+                <td>Cemeca</td>
+            ) : (
+                <td>Sofitech</td>
+            )}
+           
+        </tr>
+    ) 
+    console.log(ListTest)
+       
     const themeReducer = useSelector(state => state.ThemeReducer.mode)
 
         return (
@@ -184,7 +161,7 @@ const Dashboard = () => {
             <div>
                 {currentUser ?(
                     <div>
-                        <h2 className="page-header">Dashboard</h2>
+                        <h2 className="page-header">tableau de bord</h2>
                         <div className="row">
                             <div className="col-6">
                                 <div className="row">
@@ -218,39 +195,28 @@ const Dashboard = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-4">
-                                <div className="card">
-                                    <div className="card__header">
-                                        <h3>top customers</h3>
-                                    </div>
-                                    <div className="card__body">
-                                        <Table
-                                            headData={topCustomers.head}
-                                            renderHead={(item, index) => renderCusomerHead(item, index)}
-                                            bodyData={topCustomers.body}
-                                            renderBody={(item, index) => renderCusomerBody(item, index)}
-                                        />
-                                    </div>
-                                    <div className="card__footer">
-                                        <Link to='/'>view all</Link>
-                                    </div>
-                                </div>
-                            </div>
+                         
                             <div className="col-8">
                                 <div className="card">
                                     <div className="card__header">
-                                        <h3>latest orders</h3>
+                                        <h3>Dernières Sociétés crées</h3>
                                     </div>
                                     <div className="card__body">
+                                   
+                                           
+                                    
+                                    
                                         <Table
                                             headData={latestOrders.header}
                                             renderHead={(item, index) => renderOrderHead(item, index)}
-                                            bodyData={latestOrders.body}
+                                            bodyData={ListTest}
                                             renderBody={(item, index) => renderOrderBody(item, index)}
                                         />
+                                        
+                                    
                                     </div>
                                     <div className="card__footer">
-                                        <Link to='/'>view all</Link>
+                                        <Link to='Societes'>view all</Link>
                                     </div>
                                 </div>
                             </div>

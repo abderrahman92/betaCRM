@@ -18,7 +18,10 @@ module.exports = function(app) {
     controller.signup
   );
   app.post("/api/auth/signin", controller.signin);
-  app.post("/api/auth/historique", controller.historique_auth);
+  app.post("/api/auth/historique", controller.Post_historique_auth);
+  app.get("/api/auth/list_historique", controller.get_historique_auth);
+  app.delete("/api/auth/list_historique", controller.deleteAll_historique_auth);
+  app.delete("/api/auth/list_historique/:id", controller.delete_historique_auth);
   app.get("/api/find", test.findAll);
   
 };

@@ -1,6 +1,10 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller");
+const user = require("../controllers/liste_user.controllers");
 module.exports = function(app) {
+  // Retrieve all TutorialsÒ
+  app.get("/api/test/liste_user", user.findAll);
+
   app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -9,19 +13,19 @@ module.exports = function(app) {
     next();
   });
   app.get("/api/test/all", controller.allAccess);
-  //cemeca consultation
+  //cemeca user
   app.get(
     "/api/test/cemeca",
     [authJwt.verifyToken],
     controller.cemecaBoard
   );
-  //sofitech consultation
+  //sofitech user
   app.get(
     "/api/test/sofitech",
     [authJwt.verifyToken, authJwt.isSofitech],
     controller.sofitechBoard
   );
-  //super admin
+  //super user
   app.get(
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],

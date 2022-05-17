@@ -1,166 +1,37 @@
 
-import React, { useState,useRef } from "react";
+import React, { useState,useRef,useEffect } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthSociete from "../services/societe";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useForm } from "react-hook-form";
-
-
-
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        champ ne doit pas étre vide !
-      </div>
-    );
-  }
-};
-
-const vsiret = value => {
-  if (isNaN(value)&&(value.length<9)&&(value.length>13)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        siret invalide :(.
-      </div>
-    );
-  }
-};
-
-const vsiren = value => {
- if (isNaN(value)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid siren.
-      </div>
-    );
-  }
-};
-
-const vnom_soc = value => {
-  if ((value.length<4)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-       nom socitété invalide !.
-      </div>
-    );
-  }
-};
-
-const vnom_responsable = value => {
-  if ((value.length<4)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        nom responsable invalide !.
-      </div>
-    ); 
-  }
-};
-
-const vdate_creation_soc = value => {
-  if ((value.length<4)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        date invalide !
-      </div>
-    );
-  }
-};
-
-const vactivité = value => {
-  if ((value.length<4)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        activité invalide !
-      </div>
-    );
-  }
-};
-const vadresse = value => {
-  if ((value.length<4)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        adresse invalide !
-      </div>
-    );
-  }
-};
-const vpays = value =>{
-  if ((value.length<4)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        pays invalide !
-      </div>
-    );
-  }
-}
-
-const cville = value => {
-  if (value.length < 4 || value.length > 10) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        ville invalide !
-      </div>
-    );
-  }
-};
-
-const vcode_postal = value => {
-  if (value.length < 4 || value.length > 10) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        code postal invalide !
-      </div>
-    );
-  }
-};
-
-const vopportunité = value => {
-  if (value.length < 4) {
-    return (
-      <div className="alert alert-danger" role="alert">
-         opportunité invalide !
-      </div>
-    );
-  }
-};
-
-const vobservation = value => {
-  if (value.length < 4) {
-    return (
-      <div className="alert alert-danger" role="alert">
-         opportunité invalide !
-      </div>
-    );
-  }
-};
-
-const vtel = value => {
-  if (value.length < 4 || value.length > 10) {
-    return (
-      <div className="alert alert-danger" role="alert">
-         télephone invalide !
-      </div>
-    );
-  }
-};
-
-const vid_role = value => {
-  if (isNaN(value)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        1 or 2.
-      </div>
-    );
-  }
-};
+import checkForm from '../common/Ajouter/checkedForm'
+import './../assets/css/picklist.css'
+import Multiselect from 'multiselect-react-dropdown';
+import axios from 'axios';
 
 
 const AddTutorial = () => {
   
+
+
+  //variable checked from 
+  const required = checkForm.required;
+  const vsiret = checkForm.vsiret;
+  const vsiren = checkForm.vsiren;
+  const vnom_soc = checkForm.vnom_soc;
+  const vnom_responsable = checkForm.vnom_responsable;
+  const vdate_creation_soc = checkForm.vdate_creation_soc;
+  const vid_role = checkForm.vid_role;
+  const vcode_postal = checkForm.vcode_postal;
+  const vobservation = checkForm.vopportunité;
+  const cville = checkForm.cville;
+  const vsyndicat = checkForm.vobservation;
+  const vactivité = checkForm.vactivité;
+  const vtel = checkForm.vtel;
+  const vpays = checkForm.vpays;
+  const vadresse = checkForm.vadresse;
+
   const initialSocieteState = {
     siret: "",
     siren: "",
@@ -172,7 +43,7 @@ const AddTutorial = () => {
     pays: "",
     ville_soc: "",
     code_postal: "",
-    opportunité: "",
+    syndicat: "",
     observation: "",
     tel: "",
     app_sofitech: "",
@@ -183,37 +54,205 @@ const AddTutorial = () => {
    
     
   };
-  const [Societe, setSociete] = useState(initialSocieteState);
+  const liste = [
+  //FIM
+    {
+      TYPE: 'FIM',
+      NOM: 'ARTEMA'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'AXEMA'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'EVOLIS'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'FABRILABO'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'FEDERATION FORGE FONDERIE'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'FFMI'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'FIM-AC'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'FIM METAUX EN FEUILLES'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'FIM RESSORTS'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'PHOTONICS'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'SIBCO'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'SM'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'SNCT'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'SNDEC'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'SNITEM'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'SYMOP'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'SYNEG'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'UITS'
+    },
+    {
+      TYPE: 'FIM',
+      NOM: 'UNICLIMA'
+    }
+    ,
+    {
+      TYPE: 'FIM',
+      NOM: 'UNIQ'
+    }
+    ,
+    {
+      TYPE: 'FIM',
+      NOM: 'UNITAM'
+    },
+                        
+  //FIEEC
+    {
+      TYPE: 'FIEEC',
+      NOM: 'ACN'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'ACR'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'ACSIEL'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'AFNUM'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'E-VISIONS'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'FGME'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'GIFAM'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'GIL'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'FFGME'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'IGNES'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'SER'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'SIRMELEC'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'SNESE'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'SPAP'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'SPDEI'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: 'SYCABEL'
+    },
+    {
+      TYPE: 'FIEEC',
+      NOM: "Syndicat de l'éclairage"
+    },
+
+
+    ]
+  const liste_syndicat =[ {
+    TYPE: 'FIM',
+    NOM: 'ARTEMA'
+  }]  
+  const [Societe, setSociete] = useState({initialSocieteState});
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [myJSON, setactive] = useState([]);
   const form = useRef();
   const checkBtn = useRef();
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setSociete({ ...Societe, [name]: value });
-  };
 
-      const saveSociete = (e) => {
+
+  const land =(e) => {
+    setactive(Array.isArray(e)?e.map(x=>x.NOM):[])
+  }
+
+
+ 
+
+  const saveSociete = (e) => {
+        const syndicat = myJSON.join();
         var data = {
           siret: Societe.siret,
           siren: Societe.siren,
           nom_soc: Societe.nom_soc,
           nom_responsable_soc: Societe.nom_responsable_soc,
+          date_creation_soc: Societe.date_creation_soc,
           activite_soc: Societe.activite_soc,
           adresse_local: Societe.adresse_local,
           pays: Societe.pays,
           ville_soc: Societe.ville_soc,
           code_postal:Societe.code_postal,
-          opportunite: Societe.opportunite,
+          syndicat:syndicat,
           observation: Societe.observation,
-          tel: Societe.tel,
-          date_creation_soc: Societe.date_creation_soc,
+          tel: Societe.tel,   
           id_role: Societe.id_role,
           message: message.message,
           successful:successful.successful,
-
-
         };
       
         e.preventDefault();
@@ -231,17 +270,16 @@ const AddTutorial = () => {
                 pays: response.data.pays,
                 ville_soc: response.data.ville_soc,
                 code_postal: response.data.code_postal,
-                opportunite: response.data.opportunite,
+                syndicat: response.data.syndicat,
                 observation: response.data.observation,
                 tel: response.data.tel,
                 date: response.data.date,
                 id_role: response.data.id_role
               }
               );
-              setSubmitted(true);
               setSuccessful(true);
               setMessage(response.data.message)
-              console.log(response.data);
+              console.log(Societe.syndicat,'syndicat');
             },
             error => {
               const resMessage =
@@ -258,16 +296,50 @@ const AddTutorial = () => {
 
             });
         }
-      };
+  };
+  
+  console.log("test",myJSON)
+ 
 
 
+ //API INSEE
+  const API_INSEE_SIRET = 'https://entreprise.data.gouv.fr/api/sirene/v3/etablissements/?siret='
+   var b = String(Societe.siret)
+   console.log(b.length)
+   const chaine = API_INSEE_SIRET +b
+  const getAPINSEE =()=> {
+  
+    return axios.get(API_INSEE_SIRET+b);
+  }
+  console.log()
+  const [SIRETAPI, setSIRETAPI] = useState([]);
+  useEffect(() =>{
+        //afficher API insee
+        
+       
+},[]);
+
+
+const handleInputChange = event => {
+  const { name, value } = event.target;
+  setSociete({ ...Societe, [name]: value });
+  getAPINSEE().then((response) => {
+               
+    setSIRETAPI(response.data.etablissements);
+  
+})
+};
+
+console.log(b)
+console.log(chaine)
+console.log(SIRETAPI)
 
 
   return (
     <div className="submit-form">
-      
-     
 
+       
+      
          <Form onSubmit={saveSociete} ref={form}>
          {!successful && (
            <div>
@@ -287,15 +359,18 @@ const AddTutorial = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="title">siren</label>
+                {SIRETAPI.map((e)=>
+             
                 <Input
                   type="text"
                   className="form-control"
                   id="title"
-                  value={Societe.siren}
+                  value={Societe.siren=e.siren}
                   onChange={handleInputChange}
                   validations={[required,vsiren]}
                   name="siren"
                 />
+                )}
               </div>
               <div className="form-group">
                 <label htmlFor="title">nom de la societe</label>
@@ -322,16 +397,19 @@ const AddTutorial = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="title">activité de la societe</label>
+                <label htmlFor="title">code naf</label>      
+                  
+                   {SIRETAPI.map((e)=>
                 <Input
                   type="text"
                   className="form-control"
                   id="title"
-                  value={Societe.activite_soc}
+                  value={Societe.activite_soc = e.activite_principale}
                   onChange={handleInputChange}
-                  validations={[required,vactivité]}
+                  validations={[required,vsyndicat]}
                   name="activite_soc"
                 />
+                 )}
               </div>
               <div className="form-group">
                 <label htmlFor="title">adresse_local</label>
@@ -347,10 +425,11 @@ const AddTutorial = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="title">pays</label>
-                <Input
+                <input
                   type="text"
                   className="form-control"
                   id="title"
+                  defaultValue="France"
                   value={Societe.pays}
                   onChange={handleInputChange}
                   validations={[required,vpays]}
@@ -371,34 +450,47 @@ const AddTutorial = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="text">code_postale</label>
+                {SIRETAPI.map((e)=>
                 <Input
                   type="text"
                   className="form-control"
                   id="title"
-                  value={Societe.code_postal}
+                  value={Societe.code_postal=e.code_postal}
                   onChange={handleInputChange}
                   validations={[required,vcode_postal]}
                   name="code_postal"
                 />
+                )}
               </div>
+             
               <div className="form-group">
-                <label htmlFor="title">opportunité</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.opportunite}
-                  onChange={handleInputChange}
-                  validations={[required,vopportunité]}
-                  name="opportunite"
-                />
+                
+                <label htmlFor="title">syndicat</label>
+                <Multiselect
+                    displayValue="NOM"
+                    groupBy="TYPE"
+                    value="4"
+                    isObject={true}
+                    selectedValues={console.log}
+                    onChange={console.log}
+                    id={console.log}
+                    onNOMPressFn={function noRefCheck(){}}
+                    onRemove={function noRefCheck(){}}
+                    onSearch={function noRefCheck(){}}
+                    onSelect={land}
+                    options={liste}
+                    showCheckbox
+                  />
+                
               </div>
+             
               <div className="form-group">
                 <label htmlFor="title">observation</label>
                 <Input
                   type="text"
                   className="form-control"
                   id="title"
+                  defaultValue="Thierry"
                   value={Societe.observation}
                   onChange={handleInputChange}
                   validations={[required,vobservation]}
@@ -406,7 +498,7 @@ const AddTutorial = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="title">telephone responsable</label>
+                <label htmlFor="title">telephone Societes</label>
                 <Input
                   type="text"
                   className="form-control"
@@ -417,26 +509,19 @@ const AddTutorial = () => {
                   name="tel"
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="date">date_creation_soc</label>
-                <Input
-                  type="date"
-                  className="form-control"
-                  id="date_creation_soc"
-                  value={Societe.date_creation_soc}
-                  onChange={handleInputChange}
-                  validations={[required,vdate_creation_soc]}
-                  name="date_creation_soc"
-                />
-              </div>
+             
+              
               <select  validations={[required,vid_role]}  value={Societe.id_role} onChange={handleInputChange} name="id_role" >
                 <option>select une valeur</option>
                 <option value="1">cemeca</option>
                 <option value="2">sofitech</option>
               </select>
+             
               <button  className="btn btn-success">
                 Submit
               </button>
+             
+
             </div>
           )}
 

@@ -2,7 +2,7 @@
 module.exports =(sequelize,Sequelize)=>{
   const Societe = sequelize.define("societes",{
     siret: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.BIGINT,
       primaryKey: true
     },
     siren: {
@@ -32,7 +32,7 @@ module.exports =(sequelize,Sequelize)=>{
     code_postal: {
       type: Sequelize.INTEGER
     },
-    opportunite: {
+    syndicat: {
       type: Sequelize.STRING
     },
     observation: {

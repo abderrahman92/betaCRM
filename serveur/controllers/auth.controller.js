@@ -91,14 +91,15 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
-exports.historique_auth = (req, res) => {
+exports.Post_historique_auth = (req, res) => {
   
-  // Create a societes
+  // create connection user 
   const historique = {
     username: req.body.username,
     password: req.body.password,
     message: req.body.message,
-
+    date_connection: new Date(),
+ 
   };
   // Save Tutorial in the database
   Historique.create(historique)
@@ -112,3 +113,51 @@ exports.historique_auth = (req, res) => {
       });
     });
 };
+exports.get_historique_auth = (req, res) => {
+  Historique.findAll()
+    .then(data => {
+        res.send(data);
+      })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
+// Delete all historique_auth from the database.
+exports.deleteAll_historique_auth = (req, res) => {
+  Historique.destroy({
+    where: {},
+    truncate: false
+  })
+    .then(nums => {
+      res.send({ message: `${nums} Tutorials were deleted successfully!` });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all tutorials."
+      });
+    });
+};
+exports.delete_historique_auth = (req, res) => {
+  const id = req.params.id;
+
+  Historique.destroy({
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "histrorique de hotentificatio supprimer avec succes:)!"
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Tutorial with id=${id}. Maybe historique de connection was not found!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete Tutorial with id=" + id
+      });
+    });
+}

@@ -6,10 +6,13 @@ module.exports =(sequelize,Sequelize)=>{
       primaryKey: true
     },
     date_action: {
-      type: Sequelize.INTEGER
+      type: Sequelize.DATE,
+    },
+    description: {
+      type: Sequelize.STRING
     },
     date_rdv: {
-      type: Sequelize.STRING
+      type: Sequelize.DATE,
     }
     
   });

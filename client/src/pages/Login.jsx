@@ -21,6 +21,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [historique_auth, sethistorique_auth] = useState("");
   const onChangeUsername = (e) => {
     const username = e.target.value;
     setUsername(username);
@@ -37,10 +38,39 @@ const Login = () => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(username, password).then(
         () => {
+          const message = 'connection etablie !';
+          const password ='********'
           history.push("/");
           window.location.reload();
+          AuthService.create_historique_auth(username, password,message).then(
+            () => {   
+            },
+            (error) => {
+              const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              setMessage(resMessage);
+            }
+          );
         },
         (error) => {
+          const message = 'connection echouer !'
+          AuthService.create_historique_auth(username, password,message).then(
+            () => {   
+            },
+            (error) => {
+              const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              setMessage(resMessage);
+            }
+          );
           const resMessage =
             (error.response &&
               error.response.data &&

@@ -6,6 +6,7 @@ import Dashboard from '../pages/Dashboard'
 import Customers from '../pages/Customers'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
+import Action from '../pages/Action'
 import Ajouter from '../pages/Ajouter'
 
 const Routes = () => {
@@ -13,6 +14,7 @@ const Routes = () => {
         <Switch>
             <Route path='/' exact component={Dashboard}/>
             <Route path='/Societes' component={Customers}/>
+            <Route path='/Action' component={Action}/>
             <Route path='/ajouter' component={Ajouter}/>
             <Route path='/register' component={Register}/>
             <Route path='/Login' component={Login}/>
