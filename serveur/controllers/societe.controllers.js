@@ -37,9 +37,10 @@ exports.create_societe = (req, res) => {
       });
     });
 };
-// Retrieve all Tutorials from the database.
+// Retrieve all societes from the database.
 exports.findAll = (req, res) => {
     Societe.findAll()
+  
       .then(data => {
         res.send(data);
       })
@@ -52,7 +53,7 @@ exports.findAll = (req, res) => {
 };
 // find all cemeca from the database.
 exports.findAll_cemeca = (req, res) => {
-    Societe.findAll({ where: { id_role:1} })
+    Societe.findAll({ limit: 10, order: [['updatedAt', 'DESC']] , where: { id_role:1} })
       .then(data => {
         res.send(data);
       }) 
@@ -65,7 +66,7 @@ exports.findAll_cemeca = (req, res) => {
 };
 // find all cemeca from the database.
 exports.findAll_sofitech = (req, res) => {
-    Societe.findAll({ where: { id_role:2} })
+    Societe.findAll({limit: 10, order: [['updatedAt', 'DESC']] , where: { id_role:2} })
       .then(data => {
         res.send(data);
       }) 
@@ -78,7 +79,23 @@ exports.findAll_sofitech = (req, res) => {
 };
 // Find a single Tutorial with an id
 exports.findOne = (req, res) => {
-  
+  const id = req.params.id;
+
+  Societe.findByPk(id)
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Societe with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Tutorial with id=" + id
+      });
+    });
 };
 // Update a societe by the id in the request
 exports.update = (req, res) => {

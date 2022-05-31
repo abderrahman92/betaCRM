@@ -385,7 +385,7 @@ console.log(SIRETAPI)
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="title">nom du responsable</label>
+                <label htmlFor="title">nom du delegué</label>
                 <Input
                   type="text"
                   className="form-control"

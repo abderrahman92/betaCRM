@@ -2,22 +2,323 @@ import React, { useState, useRef ,useEffect} from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import checkForm from "../common/Register/checkedForm"
+
+import AuthAction from "../services/Action";
+import AuthService from "../services/auth.service";
+import { useParams } from "react-router-dom";
+import UserService from "../services/user.service";
+import axios from 'axios';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+
+
+//table class
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
+
+
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+
 const Action = (props) => {
+
+    const [successful, setSuccessful] = useState(false);
+    const [message, setMessage] = useState("");
+    const form = useRef();
+    const checkBtn = useRef();
+    const [ID_societe,setID_societe] = useState([]);
+    const [ListeAction,SetAction] = useState([]);
+    useEffect(()=>{
+      const user = AuthService.getCurrentUser();
+          if (user){
+              //ACTION 
+              AuthAction.findAll().then((response) => {
+                SetAction(response.data)
+                console.log(response.data)
+              })
+              .catch((e) => {
+                  console.log(e);
+              });
+                 //afficher cemca
+          UserService.getCemecaBoard().then(
+              response => {
+                  axios.get("http://localhost:8080/cemeca").then((response)=>{
+                    setID_societe(response.data);
+                  })
+              },
+        
+
+              
+            );
+             //afficher cemca
+          UserService.getSofitechBoard().then(
+              response => {
+                  axios.get("http://localhost:8080/sofitech").then((response)=>{
+                    setID_societe(response.data);
+                  })
+              },
+
+            );
+            
+          }
+   },[]) 
+
+   //get action where user
+const user = AuthService.getCurrentUser()
+const listeActUser =ListeAction.filter(task=>task.id_utili===user.id)
+console.log(listeActUser)
+
+
+// Get ID from URL
+const params = useParams();
+var nb=parseInt(params.id);
+const actItem =ID_societe.filter(task=>task.siret===nb)
+console.log(actItem)
+//inntial user state
+
+//intitial Action 
+    const initial1ctionState = {
+     id_utili:"",
+    nom_interlocuteur: "",
+    type_action:"",
+    nom_societe: "",
+    description: "",
+    date_action: "",
+    date_rdv: "", 
+    };
+
+  const [Action, setAction] = useState({initial1ctionState});
+
+ console.log(nb) 
+  
+  const saveAction = (e) => {
+  
+    var data = {
+      nom_interlocuteur:Action.nom_interlocuteur,
+      nom_societe:actItem[0].nom_soc,
+      date_rdv:Action.date_rdv,
+      date_action: new Date(),
+      id_utili:user.id,
+      type_action:Action.type_action,
+      description:Action.description,
+
+
+     
+    };
+  
+    e.preventDefault();
+    form.current.validateAll();
+    if (checkBtn.current.context._errors.length === 0) {
+      AuthAction.create(data)
+        .then(response => {
+          setAction({
+           nom_interlocuteur:response.data.nom_interlocuteur,
+           nom_societe: response.data.nom_societe,
+           date_rdv: response.data.date_rdv,
+           date_action: response.data.date_action,
+           id_utili: response.data.id_utili,
+           type_action: response.data.type_action,
+           description: response.data.description,
+           
+          }
+          );
+          setSuccessful(true);
+          setMessage(response.data.message)
+        },
+        error => {
+          const resMessage =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      setMessage(resMessage);
+        }
+        )
+        .catch(e => {
+          console.log(e);
+
+        });
+    }
+};
+const handleInputChange = event => {
+  const { name, value } = event.target;
+  setAction({ ...Action, [name]: value });
+
+};
+
+
+
+
+const options = [
+  { value: 'RDV', label: 'RDV' },
+  { value: 'contact téléphonique', label: 'contact téléphonique' },
+  { value: 'contact teams', label: 'contact teams' },
+  { value: 'contact par courrier', label: 'contact par courrier' }
+]
 
     return (
         <div className="col-md-12">
   
-          <h1>
-            Ajouter une action
-          </h1>
+          
    
     
-      {/* ajouter un user */}
-            <div className="card card-container">
-              <h3>Ajouter un utilisateur</h3>
+   {/* ajouter un user */}
+  
+
+   <h3><i class='bx bxs-bank danger'></i> liste des actions</h3>
+            <TableContainer component={Paper}>
+                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                        <TableHead>
+                                        <TableRow>
+                                            <TableCell>nom societe</TableCell>
+                                            <TableCell align="right">date rdv</TableCell>
+                                            <TableCell align="right">nom_interlocuteur</TableCell>
+                                            <TableCell align="right">date_action</TableCell>
+                                            <TableCell align="right">type</TableCell>
+                                        </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                        {listeActUser.map((row) => (
+                                            <TableRow
+                                            key={row.nom}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                            <TableCell component="th" scope="row">
+                                                {row.nom_societe}
+                                            </TableCell>
+                                            
+                                            <TableCell align="right">{row.date_rdv}</TableCell>
+                                            <TableCell align="right">{row.nom_interlocuteur}</TableCell>
+                                            <TableCell align="right">{row.date_action}</TableCell>
+                                            <TableCell align="right">{row.type_action}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                        </TableBody>
+                                    </Table>
+              </TableContainer>
+     
+
+              <br />
+              <h1>
+            Ajouter une action
+          </h1>
+              <div className="card card-container">
+           
+            {actItem.map((e)=>(
+              <h3><i class='bx bxs-bank danger'></i>  {e.nom_soc}</h3>
+            ))}
+            <Form onSubmit={saveAction} ref={form}>
+                {!successful && (
+                    <div>
+                      <div className="form-group">
+                        <label htmlFor="username">utlisateur</label>
+                         <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                          <TextField
+                            id="outlined-multiline-static"
+                            label="utlisateur"
+                            multiline
+                            name="id_utili"
+                            value={user.username}
+                            onChange={handleInputChange}
+                          />
+                         </FormControl>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="username">Date du rendez vous</label>
+                        <Input
+                          type="date"
+                          className="form-control"
+                          name="date_rdv"
+                          value={Action.date_rdv}
+                          onChange={handleInputChange}
+                          
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="username">description</label>
+                          <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                            <TextField
+                              id="outlined-multiline-static"
+                              label="description"
+                              multiline
+                              rows={7}
+                              name="description"
+                              value={Action.description}
+                              onChange={handleInputChange}
+                            />
+                          </FormControl>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="email">nom de l'interlocuteur</label>
+                       
+                        <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                          <TextField
+                            id="outlined-multiline-static"
+                            label="nom de l'interlocuteur"
+                            multiline
+                            name="nom_interlocuteur"
+                            value={Action.nom_interlocuteur}
+                            onChange={handleInputChange}
+                          />
+                         </FormControl>
+                      </div>          
+                      <div className="form-group">
+                        <label htmlFor="password">type d'action</label>
+
+                              <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="demo-simple-select"
+                                  value={Action.type_action}
+                                  label="Age"
+                                  name="type_action"
+                                  onChange={handleInputChange}
+                                >
+                                  <MenuItem value={"RDV"}>RDV</MenuItem>
+                                  <MenuItem value={"contact téléphonique"}>contact téléphonique</MenuItem>
+                                  <MenuItem value={"contact teams"}>contact teams</MenuItem>
+                                  <MenuItem value={"contact par courrier"}>contact par courrier</MenuItem>
+                                </Select>
+                              </FormControl>
               
-            </div> 
+                      </div>
+
+                    
+
+                      <div className="form-group">
+                        <button className="btn btn-primary btn-block">Valider l'action</button>
+                      </div>
+                    </div>
+                  )}
+
+                  {message && (
+                    <div className="form-group">
+                      <div
+                        className={
+                          successful
+                            ? "alert alert-success"
+                            : "alert alert-danger"
+                        }
+                        role="alert"
+                      >
+                        {message}
+                      </div>
+                    </div>
+                  )}
+                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
+              </Form>
+          </div> 
           </div>
       );
     }

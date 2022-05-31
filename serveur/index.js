@@ -23,6 +23,7 @@ require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/societes')(app);
 require('./routes/action')(app);
+require('./routes/interlocuteur')(app);
 /*
 db.sequelize.sync({force: true}).then(() => {
   console.log('Drop and Resync Db');

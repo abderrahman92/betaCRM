@@ -24,17 +24,18 @@ const remove = id => {
   return http.delete(`/tutorials/${id}`);
 };
 
+*/
 const removeAll = () => {
-  return http.delete(`/tutorials`);
+  return axios.delete(`/tutorials`);
+};
+const findByTitle = siret => {
+  return axios.get(`/Societes?siret=${siret}`);
 };
 
-const findByTitle = title => {
-  return http.get(`/tutorials?title=${title}`);
-};
-*/
 const AuthSociete = {
 
-  create
+  create,
+  findByTitle
 };
 
 export default AuthSociete;

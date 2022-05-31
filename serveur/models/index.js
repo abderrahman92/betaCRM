@@ -42,9 +42,10 @@ db.user.belongsToMany(db.role, {
 //jointure des entites
 //joiture user plusieurs action,
 db.user.hasMany(db.action, {foreignKey: 'id_utili', sourceKey: 'id'});
+
 //joiture role plusieurs societes
 db.role.hasMany(db.societe, {foreignKey: 'id_role', sourceKey: 'id'});
-// user plusieurs actions
+// user plusieurs interlocuteur
 db.societe.hasMany(db.interlocuteur, {foreignKey: 'id_soc', sourceKey: 'siret'});
 //societe plusieurs police
 db.societe.hasMany(db.police, {foreignKey: 'id_soc', sourceKey: 'siret'});

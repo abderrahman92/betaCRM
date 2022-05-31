@@ -1,24 +1,27 @@
 const db = require("../models");
-const Action = db.action;
+const Interlocuteur = db.interlocuteur;
 const Op = db.Sequelize.Op;
 // Create and Save a new Societes
 exports.create_action = (req, res) => {
   // Create a societes
   const insert = {
-    date_action: req.body.date_action,
-    description:req.body.description,
-    date_rdv: req.body.date_rdv,
-    nom_interlocuteur:req.body.nom_interlocuteur,
-    nom_societe: req.body.nom_societe,
-    type_action: req.body.type_action,
-    id_utili: req.body.id_utili,
+    nom:req.body.nom,
+    prenom:req.body.prenom,
+    email:req.body.email,
+    adresse:req.body.adresse,
+    code_postale:req.body.code_postale,
+    tel:req.body.tel,
+    fonction_inter:req.body.fonction_inter,
+    id_soc:req.body.id_soc,
    
   };
+  
+  console.log(insert)
+  console.log(Interlocuteur)
   // Save Tutorial in the database
-  console.log(Action)
-  Action.create(insert)
+  Interlocuteur.create(insert)
     .then(data => {
-      res.send({message:'société ajouter avec succée :)',data});
+      res.send({message:'Interlocuteur ajouter avec succée ',data});
     })
     .catch(err => {
       res.status(500).send({
@@ -27,10 +30,8 @@ exports.create_action = (req, res) => {
       });
     });
 };
-// Retrieve all actions from the database.
 exports.findAll = (req, res) => {
-  Action.findAll()
-    .then(data => {
+  Interlocuteur.findAll().then(data => {
       res.send(data);
     })
     .catch(err => {
@@ -40,3 +41,4 @@ exports.findAll = (req, res) => {
       });
     });
 };
+

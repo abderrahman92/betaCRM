@@ -101,6 +101,9 @@ const Sidebar = props => {
       //login desactiver
       const desaItem =new_sidbar.filter(task=>task.status==="desactive")
       const actItem =new_sidbar.filter(task=>task.status==="active")
+
+      console.log(new_sidbar)
+      console.log(actItem)
     return (
         <div className='sidebar'>
             <div className="sidebar__logo">

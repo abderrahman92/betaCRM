@@ -2,7 +2,8 @@ module.exports =(sequelize,Sequelize)=>{
   const Interlocuteur = sequelize.define("Interlocuteur",{
     id_interlocuteur: {
       type: Sequelize.INTEGER,
-      primaryKey: true
+      autoIncrement: true,
+      primaryKey: true,
     },
     nom: {
       type: Sequelize.STRING
@@ -22,8 +23,8 @@ module.exports =(sequelize,Sequelize)=>{
     tel: {
       type: Sequelize.STRING
     },
-    activite: {
-      type: Sequelize.INTEGER
+    fonction_inter: {
+      type: Sequelize.STRING
     }
   });
   return Interlocuteur;

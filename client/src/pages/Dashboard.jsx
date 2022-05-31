@@ -12,13 +12,25 @@ import { useSelector } from 'react-redux'
 
 import StatusCard from '../components/status-card/StatusCard'
 
-import Table from '../components/table/Table'
+
 
 import Badge from '../components/badge/Badge'
 
-import statusCards from '../assets/JsonData/status-card-data.json'
+
+//table class
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 
 import UserService from "../services/user.service";
+
+import AuthAction from  "../services/Action";
 
 
 const chartOptions = {
@@ -56,7 +68,7 @@ const chartOptions = {
     }
 }
 
-
+console.log(AuthAction.findAll)
 
 
 const renderCusomerHead = (item, index) => (
@@ -86,20 +98,33 @@ const renderOrderHead = (item, index) => (
 
 
 const Dashboard = () => {
+
+
+  //afficher nombre d'action
+
+
+
+
  
     const[ListTest,SetTest]=useState([]);
     const[Cemeca,SetIscemeca]=useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
+    const[Action,SetAction]=useState([]);
+
     useEffect(()=>{
         const user = AuthService.getCurrentUser();
             if (user){
+                //ACTION 
+                AuthAction.findAll().then((response) => {
+                        SetAction(response.data)
+                    })
+                .catch((e) => {
+                    console.log(e);
+                });
+
+                 
                 setCurrentUser(user) 
-            }
-     },[]) 
-     useEffect(() =>{
-        const user = AuthService.getCurrentUser();
-        if(user){
-            //afficher cemca
+                   //afficher cemca
             UserService.getCemecaBoard().then(
                 response => {
                     axios.get("http://localhost:8080/cemeca").then((response)=>{
@@ -123,10 +148,24 @@ const Dashboard = () => {
                 
               );
               
-        }
+            }
+     },[]) 
+     const Action_util =Action.filter(task=>task.id_utili===currentUser.id)
+    
+//action
+const statusCards =[
+    {
+        "icon": "bx bx-bar-chart-alt",
+        "count": Action.length,
+        "title": "nombres d'action "
+    },
+    {
+        "icon": "bx bx-bar-chart-alt",
+        "count": Action_util.length,
+        "title": "action utilisateur"
+    }
+]
 
-        
-    },[]);
     const latestOrders = {
         header: [
             "siret",
@@ -135,14 +174,14 @@ const Dashboard = () => {
             "tel",
             "société"
         ],
-        body: [ListTest]
+        
     }
     const renderOrderBody = (item, index) => (
         <tr key={index}>
             <td>{item.siret}</td>
             <td>{item.activite_soc}</td>
             <td>{item.nom_responsable_soc}</td>
-            
+    
             <td>{item.tel}</td>
             {Cemeca? (
                 <td>Cemeca</td>
@@ -152,7 +191,7 @@ const Dashboard = () => {
            
         </tr>
     ) 
-    console.log(ListTest)
+    console.log()
        
     const themeReducer = useSelector(state => state.ThemeReducer.mode)
 
@@ -165,17 +204,21 @@ const Dashboard = () => {
                         <div className="row">
                             <div className="col-6">
                                 <div className="row">
+                                   
                                     {
                                         statusCards.map((item, index) => (
                                             <div className="col-6" key={index}>
+                                                 <a href="Action/32143789900057">
                                                 <StatusCard
                                                     icon={item.icon}
                                                     count={item.count}
                                                     title={item.title}
                                                 />
+                                                 </a>
                                             </div>
                                         ))
                                     }
+                                   
                                 </div>
                             </div>
                             <div className="col-6">
@@ -202,18 +245,38 @@ const Dashboard = () => {
                                         <h3>Dernières Sociétés crées</h3>
                                     </div>
                                     <div className="card__body">
-                                   
-                                           
-                                    
-                                    
-                                        <Table
-                                            headData={latestOrders.header}
-                                            renderHead={(item, index) => renderOrderHead(item, index)}
-                                            bodyData={ListTest}
-                                            renderBody={(item, index) => renderOrderBody(item, index)}
-                                        />
                                         
-                                    
+                                      
+                                    <TableContainer component={Paper}>
+                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                        <TableHead>
+                                        <TableRow>
+                                            <TableCell>siret</TableCell>
+                                            <TableCell align="right">nom_soc</TableCell>
+                                            <TableCell align="right">observation</TableCell>
+                                            <TableCell align="right">adresse postal</TableCell>
+                                            <TableCell align="right">date ajouté</TableCell>
+                                        </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                        {ListTest.map((row) => (
+                                            <TableRow
+                                            key={row.siret}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                            <TableCell component="th" scope="row">
+                                                {row.siret}
+                                            </TableCell>
+                                            <TableCell align="right">{row.nom_soc}</TableCell>
+                                            <TableCell align="right">{row.observation}</TableCell>
+                                            <TableCell align="right">{row.adresse_local}</TableCell>
+                                            <TableCell align="right">{row.createdAt}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                        </TableBody>
+                                    </Table>
+                                    </TableContainer>
+                                        
                                     </div>
                                     <div className="card__footer">
                                         <Link to='Societes'>view all</Link>

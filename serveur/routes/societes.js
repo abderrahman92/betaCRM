@@ -7,6 +7,8 @@ app.get("/admin", tutorials.findAll);
 app.get("/cemeca", tutorials.findAll_cemeca);
 //route all societe where role is sofitech  
 app.get("/sofitech", tutorials.findAll_sofitech);
+  // //route all societe where id
+app.get("/", tutorials.findOne);
 //route ajouter societer 
 app.post("/api/auth/ajouter", tutorials.create_societe);
 };
