@@ -8,10 +8,12 @@ const { user } = require("./models");
 const Role = db.role;
 const User = db.user;
 const Societe = db.societe;
+const path = require("path");
 var corsOptions = {
   origin: "http://localhost:8081"
 };
 
+app.use(express.static(path.join(__dirname + "/public")))
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(express.json());
