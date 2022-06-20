@@ -12,7 +12,14 @@ import EventBus from "../../common/EventBus"
 
 import logo from '../../assets/images/sofitech.png'
 
+import logoCemeca from '../../assets/images/logo-cemeca.png'
+
 import sidebar_items from '../../assets/JsonData/sidebar_routes.json'
+
+import Role from '../../services/role'
+
+import axios from "axios";
+import role from '../../services/role';
  
 //sidabr desactivation parametres
 const SidebarItedes = props => {
@@ -58,9 +65,48 @@ const Sidebar = props => {
     const [new_sidbar,setSidbar]=useState(sidebar_items);
     const [currentUser, setCurrentUser] = useState(undefined);
     const [adminstate, setadminstate] = useState(undefined);
+    const [roleAuth,setRoleAuth] = useState([]);
+    const [cemeca,setcemeca] = useState(undefined);
+
+
+    // GET USER 
+    const user = AuthService.getCurrentUser()
+    //GET ROLE 
+    const retrieveRole = () => {
+
+        if(user){
+            UserService.getCemecaBoard().then(
+                response => {
+                   setcemeca(true)
+                    setRoleAuth(response.data);
+                },
+                error => {
+                    setcemeca(false)
+                    setRoleAuth({
+                    content:
+                      (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                      error.message ||
+                      error.toString()
+                  });
+                }
+              );
+           
+        
+        
+    
+    
+      }
+      }; 
+      
+      console.log(roleAuth) 
+    //FILTER USER WHERE ROLE
+   
      useEffect(()=>{ 
         const user = AuthService.getCurrentUser()
             if (user){
+                retrieveRole();
                 const nouveaustate = [...new_sidbar]
                 UserService.getAdminBoard().then(
                     response => {
@@ -104,10 +150,18 @@ const Sidebar = props => {
 
       console.log(new_sidbar)
       console.log(actItem)
+     const renderElement = () =>{
+      if (cemeca === true){
+          return <img  src={logoCemeca} alt="company logo" />
+      }
+      else
+      return <img  src={logo} alt="company logo" />
+     }
     return (
         <div className='sidebar'>
             <div className="sidebar__logo">
-                <img  src={logo} alt="company logo" />
+                {renderElement()}
+
             </div>
             {
                 actItem.map((item, index) => (

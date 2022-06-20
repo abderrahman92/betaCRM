@@ -2,7 +2,6 @@ import React, { useState, useRef ,useEffect} from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
 import AuthAction from "../services/Action";
 import AuthService from "../services/auth.service";
 import { useParams } from "react-router-dom";
@@ -15,7 +14,6 @@ import FormControl from '@mui/material/FormControl';
 
 
 //table class
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -26,7 +24,7 @@ import Paper from '@mui/material/Paper';
 
 
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select  from '@mui/material/Select';
 
 
 const Action = (props) => {
@@ -234,7 +232,7 @@ const options = [
                          </FormControl>
                       </div>
                       <div className="form-group">
-                        <label htmlFor="username">Date du rendez vous</label>
+                        <label htmlFor="username">Date de l'action</label>
                         <Input
                           type="date"
                           className="form-control"

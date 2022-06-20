@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes
 require('./routes/auth.routes')(app);
+require('./routes/role')(app);
 require('./routes/user.routes')(app);
 require('./routes/societes')(app);
 require('./routes/action')(app);

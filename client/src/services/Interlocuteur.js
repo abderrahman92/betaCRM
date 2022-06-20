@@ -14,7 +14,7 @@ class AuthAction {
  
 
   findAll(){
-    return axios.post(API_URL + "interlocuteur");
+    return axios.get(API_URL + "interlocuteur");
 
   };
  

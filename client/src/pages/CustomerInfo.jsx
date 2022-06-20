@@ -7,62 +7,70 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import UserService from "../services/user.service";
+import interService from "../services/Interlocuteur"
 import AuthService from "../services/auth.service";
 import { useParams } from "react-router-dom";
 
 
 
 function Customersinfo () {
+  //lister la societe selon l'id 
   const[ListSociete,SetSociete]=useState([]);
+  //les interlocuteur de la societes selon l'id 
+  const[listInter,SetInter]=useState([]);
+  // Get ID from URL
+  const params = useParams(); 
+  var nb=parseInt(params.id);
+  //FILTER  INTERLOCUTEUR WHERE ID SOCIETES 
+  const id_soc =listInter.filter(task=>task.id_soc===nb)
+  //GET USER INFO
   const user = AuthService.getCurrentUser()
+   //SELECT ALL SOCIETES WHERE AUTH
+   const retrieveTutorials = () => {
+    if(user){
+      interService.findAll().then(
+        response => {
+            axios.get("http://localhost:8080/api/auth/interlocuteur").then((response)=>{
+              SetInter(response.data);
+              console.log(response.data);
+            })
+        },
+
+      )
+
+          
+        
+      //afficher cemca
+      UserService.getCemecaBoard().then(
+          response => {
+              axios.get("http://localhost:8080/cemeca").then((response)=>{
+                SetSociete(response.data);
+              })
+          },
+
+        );
+        //afficher sofitech
+      UserService.getSofitechBoard().then(
+          response => {
+              axios.get("http://localhost:8080/sofitech").then((response)=>{
+                SetSociete(response.data);
+              })
+          },
+    
+
+          
+        );
+
+  }
+  };  
+  //FILTER SOCIETES SELON L'ID 
+  const actItem =ListSociete.filter(task=>task.siret===nb)
   useEffect(() =>{
     retrieveTutorials()
-    
-},[]);
+  },[]);
 
 
-const retrieveTutorials = () => {
-  if(user){
-    //afficher cemca
-    UserService.getCemecaBoard().then(
-        response => {
-            axios.get("http://localhost:8080/cemeca").then((response)=>{
-              SetSociete(response.data);
-            })
-        },
-
-      );
-       //afficher sofitech
-    UserService.getSofitechBoard().then(
-        response => {
-            axios.get("http://localhost:8080/sofitech").then((response)=>{
-              SetSociete(response.data);
-            })
-        },
-  
-
-        
-      );
-
-}
-
-};
-
-console.log(ListSociete)
-// Get ID from URL
-const params = useParams();
-var nb=parseInt(params.id);
-const actItem =ListSociete.filter(task=>task.siret===nb)
-console.log(actItem)
-
-  const bull = (
-    <Box
-      component="span"
-      sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-    >
-      •
-    </Box>
-  );
+//CARD TABLE 
   const card = (
     <React.Fragment>
       {actItem.map((e)=>
@@ -114,6 +122,18 @@ console.log(actItem)
         telephone : {e.tel}
 
         </Typography>
+
+        <Typography variant="body2">
+        les interlocuteurs ratacher a cette societe
+        {
+          id_soc.map((item, index) => (
+             <Typography variant="body2"key={index}>
+                 <i class='bx bxs-user'></i> {item.nom}                                
+              </Typography>
+              ))
+        }
+        </Typography>
+    
        
       </CardContent>
        )}

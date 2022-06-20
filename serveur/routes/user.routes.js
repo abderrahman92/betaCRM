@@ -22,7 +22,7 @@ module.exports = function(app) {
   //sofitech user
   app.get(
     "/api/test/sofitech",
-    [authJwt.verifyToken, authJwt.isSofitech],
+    [authJwt.verifyToken],
     controller.sofitechBoard
   );
   //super user

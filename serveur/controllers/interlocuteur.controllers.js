@@ -30,6 +30,7 @@ exports.create_action = (req, res) => {
       });
     });
 };
+// trouver tous les interlocuteur 
 exports.findAll = (req, res) => {
   Interlocuteur.findAll().then(data => {
       res.send(data);

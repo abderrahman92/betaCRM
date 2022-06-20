@@ -13,6 +13,7 @@ import ThemeMenu from '../thememenu/ThemeMenu'
 import notifications from '../../assets/JsonData/notification.json'
 
 import user_menu from '../../assets/JsonData/user_menus.json'
+import tustom from '../../pages/Customers'
 
 
 const curr_user = {
@@ -51,6 +52,7 @@ const renderUserMenu =(item, index) => (
 const Topnav = props => {
     const [currentUser, setCurrentUser] = useState(undefined);
    
+   
      useEffect(()=>{
         const user = AuthService.getCurrentUser();
             if (user){
@@ -65,10 +67,13 @@ const Topnav = props => {
             {user?(
         
                 <div className='topnav'>
-                    <div className="topnav__search">
-                        <input type="text" placeholder='Search here...' />
-                        <i className='bx bx-search'></i>
-                    </div>
+                    <div className="input-group mb-3">
+                    <div className="topnav">
+                      <div className="topnav__search">
+                         
+                      </div>
+                    </div> 
+                  </div>
                     <div className="topnav__right">
                         <div className="topnav__right-item">
                             {/* dropdown here */}
