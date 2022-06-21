@@ -26,7 +26,7 @@ module.exports = function(app) {
     controller.sofitechBoard
   );
   //super user
-  app.get(
+  app.get( 
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
