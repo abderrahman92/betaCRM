@@ -64,7 +64,7 @@ exports.findAll_cemeca = (req, res) => {
         });
       });
 };
-// find all cemeca from the database.
+// find all sofitech from the database.
 exports.findAll_sofitech = (req, res) => {
     Societe.findAll({limit: 10, order: [['updatedAt', 'DESC']] , where: { id_role:2} })
       .then(data => {
@@ -97,9 +97,29 @@ exports.findOne = (req, res) => {
       });
     });
 };
-// Update a societe by the id in the request
+// Update a societes by the id in the request
 exports.update = (req, res) => {
-  
+  const id = req.params.id;
+
+  Societe.update(req.body, {
+    where: { siret: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Societe modifier avec succes."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Tutorial with id=" + id
+      });
+    });
 };
 // Delete a societe with the specified id in the request
 exports.delete = (req, res) => {

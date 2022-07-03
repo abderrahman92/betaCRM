@@ -6,6 +6,10 @@ const API_URL = "http://localhost:8080/api/auth/";
 const create = data => {
   return axios.post(API_URL + "ajouter", data);
 };
+
+const update = (id, data) => {
+  return  axios.put(API_URL + `societe/update/${id}`, data);
+};
 /*
 const getAll = () => {
   return http.get("/tutorials");
@@ -17,7 +21,7 @@ const get = id => {
 
 
 const update = (id, data) => {
-  return  axios.post(API_URL + `ajouter/${id}`, data);
+  return  axios.put(API_URL + `/societe/update/${id}`, data);
 };
 
 const remove = id => {
@@ -35,7 +39,8 @@ const findByTitle = siret => {
 const AuthSociete = {
 
   create,
-  findByTitle
+  findByTitle,
+  update
 };
 
 export default AuthSociete;

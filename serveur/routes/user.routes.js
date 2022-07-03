@@ -12,20 +12,47 @@ module.exports = function(app) {
     );
     next();
   });
-  app.get("/api/test/all", controller.allAccess);
-  //cemeca user
+ 
+  //cemeca lecture  user
   app.get(
     "/api/test/cemeca",
-    [authJwt.verifyToken],
+    [authJwt.verifyToken,authJwt.isCemeca],
     controller.cemecaBoard
   );
-  //sofitech user
+  //sofitech lecture user
   app.get(
     "/api/test/sofitech",
-    [authJwt.verifyToken],
+    [authJwt.verifyToken,authJwt.isSofitech],
     controller.sofitechBoard
   );
-  //super user
+   //admin cemeca modifier 
+   app.get(
+    "/api/test/admin_cemeca",
+    [authJwt.verifyToken,authJwt.isAdminCemeca],
+    controller.cem_adminhBoard
+  );
+   //admin sofitech modifier 
+   app.get(
+    "/api/test/sup_sofitech",
+    [authJwt.verifyToken,authJwt.isAdminSofitech],
+    controller.sof_adminhBoard
+  );
+   //admin cemeca modifier 
+   app.get(
+    "/api/test/sup_cemeca",
+    [authJwt.verifyToken,authJwt.isSuperCemeca],
+    controller.cem_supBoard
+  );
+
+   //admin sofitech modifier 
+   app.get(
+    "/api/test/admin_sofitech",
+    [authJwt.verifyToken,authJwt.isSuperSofitech],
+    controller.sof_supBoard
+  );
+
+
+  //super admin all
   app.get( 
     "/api/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],

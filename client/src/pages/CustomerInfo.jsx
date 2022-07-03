@@ -21,6 +21,7 @@ function Customersinfo () {
   // Get ID from URL
   const params = useParams(); 
   var nb=parseInt(params.id);
+  console.log(nb)
   //FILTER  INTERLOCUTEUR WHERE ID SOCIETES 
   const id_soc =listInter.filter(task=>task.id_soc===nb)
   //GET USER INFO
@@ -138,7 +139,7 @@ function Customersinfo () {
       </CardContent>
        )}
       <CardActions>
-        <Button size="small">modification</Button>
+        <Button href={`/modifier/${nb}`}  size="small">modification</Button>
       </CardActions>
     </React.Fragment>
   );

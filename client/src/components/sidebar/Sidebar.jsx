@@ -66,7 +66,8 @@ const Sidebar = props => {
     const [currentUser, setCurrentUser] = useState(undefined);
     const [adminstate, setadminstate] = useState(undefined);
     const [roleAuth,setRoleAuth] = useState([]);
-    const [cemeca,setcemeca] = useState(undefined);
+    const [cemeca,setcemeca] = useState(false);
+    const [sofitech,setSofitech] = useState(false);
 
 
     // GET USER 
@@ -75,13 +76,16 @@ const Sidebar = props => {
     const retrieveRole = () => {
 
         if(user){
-            UserService.getCemecaBoard().then(
+            UserService.getSofitechBoard().then(
                 response => {
-                   setcemeca(true)
+                    setSofitech(true)
+                    setcemeca(false)
                     setRoleAuth(response.data);
+                    
                 },
                 error => {
-                    setcemeca(false)
+                    setSofitech(false)
+                    setcemeca(true)
                     setRoleAuth({
                     content:
                       (error.response &&
@@ -93,15 +97,13 @@ const Sidebar = props => {
                 }
               );
            
-        
-        
-    
-    
-      }
+         }
+
       }; 
-      
-      console.log(roleAuth) 
+
     //FILTER USER WHERE ROLE
+
+    console.log(roleAuth)
    
      useEffect(()=>{ 
         const user = AuthService.getCurrentUser()
@@ -148,14 +150,13 @@ const Sidebar = props => {
       const desaItem =new_sidbar.filter(task=>task.status==="desactive")
       const actItem =new_sidbar.filter(task=>task.status==="active")
 
-      console.log(new_sidbar)
-      console.log(actItem)
      const renderElement = () =>{
       if (cemeca === true){
           return <img  src={logoCemeca} alt="company logo" />
       }
-      else
+      else if (sofitech === true) {
       return <img  src={logo} alt="company logo" />
+    }
      }
     return (
         <div className='sidebar'>

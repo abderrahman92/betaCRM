@@ -29,7 +29,7 @@ isAdmin = (req, res, next) => {
         }
       }
       res.status(403).send({
-        message: "Require Super_admin Admin Role!"
+        message: "Require Super_admin  Role!"
       });
       return;
     });
@@ -46,7 +46,7 @@ isCemeca = (req, res, next) => {
         }
       }
       res.status(403).send({
-        message: "Require Moderator Role!"
+        message: "Require cemeca Role!"
       });
     });
   });
@@ -63,6 +63,70 @@ isSofitech = (req, res, next) => {
       }
       res.status(403).send({
         message: "Require sofitech Role!"
+      });
+    });
+  });
+};
+//sofitech admin role
+isAdminSofitech = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    user.getRoles().then(roles => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "admin_sofitech") {
+          next();
+          return;
+        }
+      }
+      res.status(403).send({
+        message: "Require sofitech admin Role!"
+      });
+    });
+  });
+};
+//cemeca admin role
+isAdminCemeca = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    user.getRoles().then(roles => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "admin_cemeca") {
+          next();
+          return;
+        }
+      }
+      res.status(403).send({
+        message: "Require cemeca admin Role!"
+      });
+    });
+  });
+};
+//sofitech super_admin role
+isSuperSofitech = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    user.getRoles().then(roles => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "super_sofitech") {
+          next();
+          return;
+        }
+      }
+      res.status(403).send({
+        message: "Require sofitech super Role!"
+      });
+    });
+  });
+};
+//cemeca super_admin role
+isSuperCemeca = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    user.getRoles().then(roles => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "super_cemeca") {
+          next();
+          return;
+        }
+      }
+      res.status(403).send({
+        message: "Require cemeca super Role!"
       });
     });
   });
@@ -91,6 +155,10 @@ const authJwt = {
   isAdmin: isAdmin,
   isCemeca:isCemeca,
   isSofitech:isSofitech,
+  isSuperCemeca: isSuperCemeca,
+  isSuperSofitech: isSuperSofitech,
+  isAdminSofitech: isAdminSofitech,
+  isAdminCemeca: isAdminCemeca,
   isModeratorOrAdmin: isModeratorOrAdmin
 };
 module.exports = authJwt;

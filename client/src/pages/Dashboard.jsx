@@ -12,9 +12,12 @@ import { useSelector } from 'react-redux'
 
 import StatusCard from '../components/status-card/StatusCard'
 
+import Moment from 'react-moment';
 
 
-import Badge from '../components/badge/Badge'
+
+
+import 'moment/locale/fr';
 
 
 //table class
@@ -270,7 +273,7 @@ const statusCards =[
                                             <TableCell align="right">{row.nom_soc}</TableCell>
                                             <TableCell align="right">{row.observation}</TableCell>
                                             <TableCell align="right">{row.adresse_local}</TableCell>
-                                            <TableCell align="right">{row.createdAt}</TableCell>
+                                            <TableCell align="right"> <Moment fromNow>{row.createdAt}</Moment></TableCell>
                                             </TableRow>
                                         ))}
                                         </TableBody>

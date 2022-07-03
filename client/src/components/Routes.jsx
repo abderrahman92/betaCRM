@@ -10,7 +10,8 @@ import Action from '../pages/Action'
 import Ajouter from '../pages/Ajouter'
 import AuthService from "../services/auth.service";
 import Interlocuteur from '../pages/Interlocuteur'
-import  CustomerInfo from '../pages/CustomerInfo'
+import CustomerInfo from '../pages/CustomerInfo'
+import CustomerModify from '../pages/societeMod'
 const Routes = () => {
     const user = AuthService.getCurrentUser();
     return (
@@ -19,6 +20,7 @@ const Routes = () => {
             {user? <Route path='/Action/:id' component={Action}/>: null }
             <Route path='/Societes' component={Customers}/>
             <Route path='/Societe/:id' component={CustomerInfo}/>
+            <Route path='/modifier/:id' component={CustomerModify}/>
             <Route path='/Interlocuteur/:id' component={Interlocuteur}/>
             <Route path='/ajouter' component={Ajouter}/>
             <Route path='/register' component={Register}/>
