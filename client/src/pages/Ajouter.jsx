@@ -9,216 +9,53 @@ import checkForm from '../common/Ajouter/checkedForm'
 import './../assets/css/picklist.css'
 import Multiselect from 'multiselect-react-dropdown';
 import axios from 'axios';
+import liste from "../assets/JsonData/liste_syndicat.json"
 
 
 const AddTutorial = () => {
-  
-
 
   //variable checked from 
-  const required = checkForm.required;
-  const vsiret = checkForm.vsiret;
-  const vsiren = checkForm.vsiren;
-  const vnom_soc = checkForm.vnom_soc;
-  const vnom_responsable = checkForm.vnom_responsable;
-  const vdate_creation_soc = checkForm.vdate_creation_soc;
-  const vid_role = checkForm.vid_role;
-  const vcode_postal = checkForm.vcode_postal;
-  const vobservation = checkForm.vopportunité;
-  const cville = checkForm.cville;
-  const vsyndicat = checkForm.vobservation;
-  const vactivité = checkForm.vactivité;
-  const vtel = checkForm.vtel;
-  const vpays = checkForm.vpays;
-  const vadresse = checkForm.vadresse;
-
-  const initialSocieteState = {
-    siret: "",
-    siren: "",
-    nom_soc: "",
-    nom_responsable_soc: "",
-    date_creation_soc: "",
-    activite_soc: "",
-    adresse_local: "",
-    pays: "",
-    ville_soc: "",
-    code_postal: "",
-    syndicat: "",
-    observation: "",
-    tel: "",
-    app_sofitech: "",
-    app_cemeca: "",
-    soc_sofitech: "",
-    soc_cemeca: "",
-    id_role: "",
-   
+    const required = checkForm.required;
+    const vsiret = checkForm.vsiret;
+    const vsiren = checkForm.vsiren;
+    const vnom_soc = checkForm.vnom_soc;
+    const vnom_responsable = checkForm.vnom_responsable;
+    const vdate_creation_soc = checkForm.vdate_creation_soc;
+    const vid_role = checkForm.vid_role;
+    const vcode_postal = checkForm.vcode_postal;
+    const vobservation = checkForm.vopportunité;
+    const cville = checkForm.cville;
+    const vsyndicat = checkForm.vobservation;
+    const vactivité = checkForm.vactivité;
+    const vtel = checkForm.vtel;
+    const vpays = checkForm.vpays;
+    const vadresse = checkForm.vadresse;
+  // intitial societe
+    const initialSocieteState = {
+      siret: "",
+      siren: "",
+      nom_soc: "",
+      nom_responsable_soc: "",
+      date_creation_soc: "",
+      activite_soc: "",
+      adresse_local: "",
+      pays: "",
+      ville_soc: "",
+      code_postal: "",
+      syndicat: "",
+      observation: "",
+      tel: "",
+      app_sofitech: "",
+      app_cemeca: "",
+      soc_sofitech: "",
+      soc_cemeca: "",
+      id_role: "",
     
-  };
-  const liste = [
-  //FIM
-    {
-      TYPE: 'FIM',
-      NOM: 'ARTEMA'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'AXEMA'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'EVOLIS'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'FABRILABO'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'FEDERATION FORGE FONDERIE'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'FFMI'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'FIM-AC'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'FIM METAUX EN FEUILLES'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'FIM RESSORTS'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'PHOTONICS'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'SIBCO'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'SM'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'SNCT'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'SNDEC'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'SNITEM'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'SYMOP'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'SYNEG'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'UITS'
-    },
-    {
-      TYPE: 'FIM',
-      NOM: 'UNICLIMA'
-    }
-    ,
-    {
-      TYPE: 'FIM',
-      NOM: 'UNIQ'
-    }
-    ,
-    {
-      TYPE: 'FIM',
-      NOM: 'UNITAM'
-    },
-                        
-  //FIEEC
-    {
-      TYPE: 'FIEEC',
-      NOM: 'ACN'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'ACR'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'ACSIEL'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'AFNUM'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'E-VISIONS'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'FGME'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'GIFAM'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'GIL'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'FFGME'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'IGNES'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'SER'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'SIRMELEC'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'SNESE'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'SPAP'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'SPDEI'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: 'SYCABEL'
-    },
-    {
-      TYPE: 'FIEEC',
-      NOM: "Syndicat de l'éclairage"
-    },
+      
+    };
 
-
-    ]
-  const liste_syndicat =[ {
-    TYPE: 'FIM',
-    NOM: 'ARTEMA'
-  }]  
+  
+  
   const [Societe, setSociete] = useState({initialSocieteState});
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
@@ -323,227 +160,231 @@ const AddTutorial = () => {
 const handleInputChange = event => {
   const { name, value } = event.target;
   setSociete({ ...Societe, [name]: value });
-  getAPINSEE().then((response) => {
-               
+  getAPINSEE().then((response) => {        
     setSIRETAPI(response.data.etablissements);
-  
-})
+  })
 };
-
-console.log(b)
-console.log(chaine)
 console.log(SIRETAPI)
+
 
 
   return (
     <div className="submit-form">
+       <div className="card card-container">
+        <h3><i class='bx bxs-bank danger'></i> Ajouter une Société</h3>
+          <Form onSubmit={saveSociete} ref={form}>
+          {!successful && (
+            <div>
 
-       
-      
-         <Form onSubmit={saveSociete} ref={form}>
-         {!successful && (
-           <div>
-
-              <div className="form-group">
-              
-                <label htmlFor="title">siret</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.siret}
-                  onChange={handleInputChange}
-                  validations={[required,vsiret]}
-                  name="siret"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">siren</label>
-                {SIRETAPI.map((e)=>
-             
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.siren=e.siren}
-                  onChange={handleInputChange}
-                  validations={[required,vsiren]}
-                  name="siren"
-                />
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">nom de la societe</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.nom_soc}
-                  onChange={handleInputChange}
-                  validations={[required,vnom_soc]}
-                  name="nom_soc"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">nom du delegué</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.nom_responsable_soc}
-                  onChange={handleInputChange}
-                  validations={[required, vnom_responsable]}
-                  name="nom_responsable_soc"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">code naf</label>      
-                  
-                   {SIRETAPI.map((e)=>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.activite_soc = e.activite_principale}
-                  onChange={handleInputChange}
-                  validations={[required,vsyndicat]}
-                  name="activite_soc"
-                />
-                 )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">adresse_local</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.adresse_local}
-                  onChange={handleInputChange}
-                  validations={[required,vadresse]}
-                  name="adresse_local"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">pays</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  defaultValue="France"
-                  value={Societe.pays}
-                  onChange={handleInputChange}
-                  validations={[required,vpays]}
-                  name="pays"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">ville_soc</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.ville_soc}
-                  onChange={handleInputChange}
-                  validations={[required,cville]}
-                  name="ville_soc"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="text">code_postale</label>
-                {SIRETAPI.map((e)=>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.code_postal=e.code_postal}
-                  onChange={handleInputChange}
-                  validations={[required,vcode_postal]}
-                  name="code_postal"
-                />
-                )}
-              </div>
-             
-              <div className="form-group">
+                <div className="form-group">
                 
-                <label htmlFor="title">syndicat</label>
-                <Multiselect
-                    displayValue="NOM"
-                    groupBy="TYPE"
-                    value="4"
-                    isObject={true}
-                    selectedValues={console.log}
-                    onChange={console.log}
-                    id={console.log}
-                    onNOMPressFn={function noRefCheck(){}}
-                    onRemove={function noRefCheck(){}}
-                    onSearch={function noRefCheck(){}}
-                    onSelect={land}
-                    options={liste}
-                    showCheckbox
+                  <label htmlFor="title">siret</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.siret}
+                    onChange={handleInputChange}
+                    validations={[required,vsiret]}
+                    name="siret"
                   />
-                
-              </div>
-             
-              <div className="form-group">
-                <label htmlFor="title">observation</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  defaultValue="Thierry"
-                  value={Societe.observation}
-                  onChange={handleInputChange}
-                  validations={[required,vobservation]}
-                  name="observation"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">telephone Societes</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={Societe.tel}
-                  onChange={handleInputChange}
-                  validations={[required,vtel]}
-                  name="tel"
-                />
-              </div>
-             
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">siren</label>
+                  {SIRETAPI.map((e)=>
+                  
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={  e.siren ? (
+                      "acrire une valeur"
+                    ) : (
+                      "acrire une valeur"
+                    )}
+                    onChange={handleInputChange}
+                    validations={[required,vsiren]}
+                    name="siren"
+                  />
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">nom de la societe</label>
+                  {SIRETAPI.map((e)=>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.nom_soc=e.unite_legale.denomination}
+                    onChange={handleInputChange}
+                    validations={[required,vnom_soc]}
+                    name="nom_soc"
+                  />
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">nom du delegué</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.nom_responsable_soc}
+                    onChange={handleInputChange}
+                    validations={[required, vnom_responsable]}
+                    name="nom_responsable_soc"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">code naf</label>      
+                    
+                    {SIRETAPI.map((e)=>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.activite_soc = e.activite_principale}
+                    onChange={handleInputChange}
+                    validations={[required,vsyndicat]}
+                    name="activite_soc"
+                  />
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">adresse_local</label>
+                  {SIRETAPI.map((e)=>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.adresse_local=e.geo_l4}
+                    onChange={handleInputChange}
+                    validations={[required,vadresse]}
+                    name="adresse_local"
+                  />
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">pays</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    defaultValue="France"
+                    value={Societe.pays}
+                    onChange={handleInputChange}
+                    validations={[required,vpays]}
+                    name="pays"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">ville_soc</label>
+                  {SIRETAPI.map((e)=>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.ville_soc=e.libelle_commune}
+                    onChange={handleInputChange}
+                    validations={[required,cville]}
+                    name="ville_soc"
+                  />
+                  )}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="text">code_postale</label>
+                  {SIRETAPI.map((e)=>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.code_postal=e.code_postal}
+                    onChange={handleInputChange}
+                    validations={[required,vcode_postal]}
+                    name="code_postal"
+                  />
+                  )}
+                </div>
               
-              <select  validations={[required,vid_role]}  value={Societe.id_role} onChange={handleInputChange} name="id_role" >
-                <option>select une valeur</option>
-                <option value="1">cemeca</option>
-                <option value="2">sofitech</option>
-              </select>
-             
-              <button  className="btn btn-success">
-                Submit
-              </button>
-             
+                <div className="form-group">
+                  
+                  <label htmlFor="title">syndicat</label>
+                  <Multiselect
+                      displayValue="NOM"
+                      groupBy="TYPE"
+                      value="4"
+                      isObject={true}
+                      selectedValues={console.log}
+                      onChange={console.log}
+                      id={console.log}
+                      onNOMPressFn={function noRefCheck(){}}
+                      onRemove={function noRefCheck(){}}
+                      onSearch={function noRefCheck(){}}
+                      onSelect={land}
+                      options={liste}
+                      showCheckbox
+                    />
+                  
+                </div>
+              
+                <div className="form-group">
+                  <label htmlFor="title">observation</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    defaultValue="Thierry"
+                    value={Societe.observation}
+                    onChange={handleInputChange}
+                    validations={[required,vobservation]}
+                    name="observation"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="title">telephone Societes</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={Societe.tel}
+                    onChange={handleInputChange}
+                    validations={[required,vtel]}
+                    name="tel"
+                  />
+                </div>
+              
+                
+                <select  validations={[required,vid_role]}  value={Societe.id_role} onChange={handleInputChange} name="id_role" >
+                  <option>select une valeur</option>
+                  <option value="1">cemeca</option>
+                  <option value="2">sofitech</option>
+                </select>
+              
+                <button  className="btn btn-success">
+                  Submit
+                </button>
+              
 
-            </div>
-          )}
-
-          {message && (
-            <div className="form-group">
-              <div
-                className={
-                  successful
-                    ? "alert alert-success"
-                    : "alert alert-danger"
-                }
-                role="alert"
-              >
-                {message}
               </div>
-            </div>
-          )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
+            )}
+
+            {message && (
+              <div className="form-group">
+                <div
+                  className={
+                    successful
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {message}
+                </div>
+              </div>
+            )}
+            <CheckButton style={{ display: "none" }} ref={checkBtn} />
           </Form>
-
         </div>
-
+    </div>
   );
 };
 

@@ -1,8 +1,17 @@
 import React,{useEffect,useState} from 'react'
 import axios from 'axios';
+import SvgIcon from '@mui/material/SvgIcon';
+import PropTypes from 'prop-types';
 import UserService from "../services/user.service";
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
+import { faInfo } from '@fortawesome/free-solid-svg-icons/faInfo';
+import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import AuthService from "../services/auth.service";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import'../components/topnav/topnav.css'
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 //material ui table 
 import EditIcon from '@mui/icons-material/Edit';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
@@ -61,8 +70,121 @@ import {
           display: 'inline-block'
       }
     }));
+    const FontAwesomeSvgIcon = React.forwardRef((props, ref) => {
+      const { icon } = props;
+    
+      const {
+        icon: [width, height, , , svgPathData],
+      } = icon;
+    
+      return (
+        <SvgIcon ref={ref} viewBox={`0 0 ${width} ${height}`}>
+          {typeof svgPathData === 'string' ? (
+            <path d={svgPathData} />
+          ) : (
+            /**
+             * A multi-path Font Awesome icon seems to imply a duotune icon. The 0th path seems to
+             * be the faded element (referred to as the "secondary" path in the Font Awesome docs)
+             * of a duotone icon. 40% is the default opacity.
+             *
+             * @see https://fontawesome.com/how-to-use/on-the-web/styling/duotone-icons#changing-opacity
+             */
+            svgPathData.map((d, i) => (
+              <path style={{ opacity: i === 0 ? 0.4 : 1 }} d={d} />
+            ))
+          )}
+        </SvgIcon>
+      );
+    });
+    
+    FontAwesomeSvgIcon.propTypes = {
+      icon: PropTypes.any.isRequired,
+    };
+    
+
+    const columns = [
+      { id: 'nom_soc', label: 'Société', minWidth: 170 },
+      { id: 'siret', label: 'SIRET', minWidth: 170 },
+      {
+        id: 'nom_responsable_soc',
+        label: 'Nom responsable',
+        minWidth: 100,
+        align: 'right',
+        format: (value) => value.toLocaleString('en-US'),
+      },
+      {
+        id: 'activite_soc',
+        label: 'Code\u00a0naf',
+        minWidth: 100,
+        align: 'right',
+        format: (value) => value.toLocaleString('en-US'),
+      },
+      {
+        id: 'syndicat',
+        label: 'Syndicat',
+        minWidth: 100,
+        align: 'right',
+        format: (value) => value.toFixed(2),
+      },
+      {
+        id: 'Interlocuteur',
+        label: 'Interlocuteur',
+        minWidth: 50,
+        align: 'right',
+        format: (value) => value.toFixed(2),
+      },
+      {
+        id: 'Action',
+        label: 'Action',
+        minWidth: 50,
+        align: 'right',
+        format: (value) => value.toFixed(2),
+      },
+    
+      {
+        id: 'info',
+        label: 'Info',
+        minWidth: 50,
+        align: 'right',
+        format: (value) => value.toFixed(2),
+      },
+      
+    ];
+    
+    function createData(societe,siret, adressepostale, nomresponnsable, codenaf,syndicat,interlocuteur,action,info) {
+    
+      return {  societe,siret, adressepostale, nomresponnsable, codenaf,syndicat ,interlocuteur,action,info };
+    }
+    const rows = [
+      createData('India', 'IN', 1324171354, 3287263),
+      createData('China', 'CN', 1403500365, 9596961),
+      createData('Italy', 'IT', 60483973, 301340),
+      createData('United States', 'US', 327167434, 9833520),
+      createData('Canada', 'CA', 37602103, 9984670),
+      createData('Australia', 'AU', 25475400, 7692024),
+      createData('Germany', 'DE', 83019200, 357578),
+      createData('Ireland', 'IE', 4857000, 70273),
+      createData('Mexico', 'MX', 126577691, 1972550),
+      createData('Japan', 'JP', 126317000, 377973),
+      createData('France', 'FR', 67022000, 640679),
+      createData('United Kingdom', 'GB', 67545757, 242495),
+      createData('Russia', 'RU', 146793744, 17098246),
+      createData('Nigeria', 'NG', 200962417, 923768),
+      createData('Brazil', 'BR', 210147125, 8515767),
+    ];
 
 function Customers () {
+
+
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
    //liste des users 
     const classes = useStyles();
@@ -146,6 +268,11 @@ function Customers () {
     useEffect(() =>{
       retrieveTutorials()     
     },[]);
+
+
+
+
+    
   
     return (
         <div>
@@ -171,79 +298,84 @@ function Customers () {
                     </div>
                      {/* TABLEAU DES SOCIETES */}
                     <div className="col-md-12 list">
-                    
-                  
-                        <TableContainer component={Paper} className={classes.tableContainer}>
-                            <Table className={classes.table} aria-label="simple table">
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell className={classes.tableHeaderCell}>Société</TableCell>
-                                  <TableCell  className={classes.tableHeaderCell}>Adresse postal</TableCell>
-                                  <TableCell className={classes.tableHeaderCell}>nom responnsable</TableCell>
-                                  <TableCell className={classes.tableHeaderCell}>Code naf</TableCell>
-                                  <TableCell className={classes.tableHeaderCell}>Syndicat</TableCell>
-                                  <TableCell className={classes.tableHeaderCell}>Interlocuteur</TableCell>
-                                  <TableCell className={classes.tableHeaderCell}>Action</TableCell>
-                                  <TableCell className={classes.tableHeaderCell}>info</TableCell>
-                                
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {ListTest.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                        <TableContainer sx={{ maxHeight: 440 }}>
+                          <Table sx={{ minWidth: 650 }} size="small" stickyHeader aria-label="sticky table">
+                            <TableHead>
+                              <TableRow>
+                              
+                                  <TableCell>Société</TableCell>
+                                  <TableCell align='left' style={{ minWidth:110}}>Adresse postal</TableCell>
+                                  <TableCell align='left' style={{ minWidth:160}}>nom responsable</TableCell>
+                                  <TableCell align='left' style={{ minWidth:80}}>Code naf</TableCell>
+                                  <TableCell align='left' style={{ minWidth:50}}>Syndicat</TableCell>
+                                  <TableCell  align='left' style={{ minWidth:50}}>Interlocuteur</TableCell>
+                                  <TableCell  align='left' style={{ minWidth:50}}>info</TableCell>
+                                  <TableCell  align='left' style={{ minWidth:50}}>Action</TableCell>
+                      
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                            {ListTest.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                                   <TableRow key={row.name}>
-                                    <TableCell>
+                                    <TableCell  align='left' style={{ minWidth:175}}>
                                         <Grid container >
-                                          
                                             <Grid item lg={10}>
-                                                <Typography className={classes.name}>siret: {row.siret}</Typography>
-                                                <Typography color="textSecondary" variant="body2">siren: {row.siren}</Typography>
-                                                <Typography color="textSecondary" variant="body2"> {row.nom_soc}</Typography>
-                  
+                                              <Typography className={classes.name} color="textSecondary" variant="body2"><i class='bx bxs-bank'></i>:{row.nom_soc}</Typography>
+                                              <Typography  variant="body3" >{row.siret}</Typography>
+                                              <Typography color="textSecondary" variant="body2">{row.siren}</Typography>
                                             </Grid>
                                         </Grid>
                                     </TableCell>
-                                    
-                                      <TableCell>
-                                      <Grid item lg={10}>
-                                                <Typography> {row.adresse_local}</Typography>
-                                                <Typography color="textSecondary" variant="body1">{row.code_postal} {row.ville}</Typography>
-                                                <Typography >{row.ville_soc}</Typography>
-                  
-                                      </Grid>
-                                      </TableCell>   
-
-                                      <TableCell>{row.nom_responsable_soc}</TableCell>   
-                                      <TableCell>{row.activite_soc}</TableCell>   
-          
-                                    <TableCell>{row.syndicat}</TableCell>      
-                                    <TableCell>
                                       
-                                        <Fab href={`/Interlocuteur/${row.siret}`} color="primary" aria-label="edit">
-                                          <EditIcon />
-                                        </Fab>
+                                    <TableCell align='left' style={{ minWidth:150}}>
+                                        <Grid >
+                                          <Typography style={{ minWidth:50}}> {row.adresse_local}</Typography>
+                                          <Typography color="textSecondary" variant="body2">{row.code_postal} {row.ville_soc}</Typography>
+                                        </Grid>
                                     
-                                    </TableCell>            
-                                    <TableCell>
-                                        <Fab href={`/Action/${row.siret}`} color="primary" aria-label="edit">
-                                        <EditIcon />
-                                        </Fab>
-                                    
+                                    </TableCell>   
+
+                                    <TableCell align='left' style={{ minWidth:50}}>{row.nom_responsable_soc}</TableCell>   
+
+                                    <TableCell>{row.activite_soc}</TableCell> 
+
+                                    <TableCell>{row.syndicat}</TableCell>     
+
+                                    <TableCell align='left' style={{ minWidth:50}}>
+                                      <Button startIcon={<FontAwesomeIcon icon={faUser} />} href={`/Interlocuteur/${row.siret}`} variant="outlined" size="small"> Small
+                                      </Button>
+                                    </TableCell>  
+
+                                    <TableCell align='left' style={{ minWidth:50}}>     
+                                      <IconButton aria-label="Example"  href={`/Societe/${row.siret}`} >
+                                        <FontAwesomeSvgIcon icon={faFile} /> 
+                                      </IconButton>
+                                    </TableCell> 
+
+                                    <TableCell align='left' style={{ minWidth:50}}>
+                                      <IconButton aria-label="Example"  href={`/Action/${row.siret}`} >
+                                        <FontAwesomeSvgIcon icon={faEllipsisV} />
+                                      </IconButton>
                                     </TableCell>
-                                    <TableCell>
                                     
-                                        <Fab href={`/Societe/${row.siret}`} color="primary" aria-label="assignmentOutlinedIcon">
-                                        <AssignmentOutlinedIcon />
-                                        </Fab>
-                                    
-                                    </TableCell>
-                                    
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                              <TableFooter>
-                              </TableFooter>
-                            </Table>
-                          </TableContainer>
+                                                    
+                              </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        <TablePagination
+                          rowsPerPageOptions={[10, 25, 100]}
+                          component="div"
+                          count={ListTest.length}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </Paper>
+
                     </div>
                   </div>
                 </div>

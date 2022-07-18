@@ -15,7 +15,7 @@ import logo from '../../assets/images/sofitech.png'
 import logoCemeca from '../../assets/images/logo-cemeca.png'
 
 import sidebar_items from '../../assets/JsonData/sidebar_routes.json'
-
+import { useParams } from "react-router-dom";
 import Role from '../../services/role'
 
 import axios from "axios";
@@ -69,6 +69,11 @@ const Sidebar = props => {
     const [cemeca,setcemeca] = useState(false);
     const [sofitech,setSofitech] = useState(false);
 
+    // Get ID from URL
+        const params = useParams(); 
+        console.log(params)
+      
+        
 
     // GET USER 
     const user = AuthService.getCurrentUser()
@@ -146,6 +151,7 @@ const Sidebar = props => {
 
  
     const activeItem = new_sidbar.findIndex(item => item.route === props.location.pathname)
+     
       //login desactiver
       const desaItem =new_sidbar.filter(task=>task.status==="desactive")
       const actItem =new_sidbar.filter(task=>task.status==="active")
