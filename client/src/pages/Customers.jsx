@@ -102,76 +102,7 @@ import {
     };
     
 
-    const columns = [
-      { id: 'nom_soc', label: 'Société', minWidth: 170 },
-      { id: 'siret', label: 'SIRET', minWidth: 170 },
-      {
-        id: 'nom_responsable_soc',
-        label: 'Nom responsable',
-        minWidth: 100,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
-      },
-      {
-        id: 'activite_soc',
-        label: 'Code\u00a0naf',
-        minWidth: 100,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
-      },
-      {
-        id: 'syndicat',
-        label: 'Syndicat',
-        minWidth: 100,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-      },
-      {
-        id: 'Interlocuteur',
-        label: 'Interlocuteur',
-        minWidth: 50,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-      },
-      {
-        id: 'Action',
-        label: 'Action',
-        minWidth: 50,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-      },
-    
-      {
-        id: 'info',
-        label: 'Info',
-        minWidth: 50,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-      },
-      
-    ];
-    
-    function createData(societe,siret, adressepostale, nomresponnsable, codenaf,syndicat,interlocuteur,action,info) {
-    
-      return {  societe,siret, adressepostale, nomresponnsable, codenaf,syndicat ,interlocuteur,action,info };
-    }
-    const rows = [
-      createData('India', 'IN', 1324171354, 3287263),
-      createData('China', 'CN', 1403500365, 9596961),
-      createData('Italy', 'IT', 60483973, 301340),
-      createData('United States', 'US', 327167434, 9833520),
-      createData('Canada', 'CA', 37602103, 9984670),
-      createData('Australia', 'AU', 25475400, 7692024),
-      createData('Germany', 'DE', 83019200, 357578),
-      createData('Ireland', 'IE', 4857000, 70273),
-      createData('Mexico', 'MX', 126577691, 1972550),
-      createData('Japan', 'JP', 126317000, 377973),
-      createData('France', 'FR', 67022000, 640679),
-      createData('United Kingdom', 'GB', 67545757, 242495),
-      createData('Russia', 'RU', 146793744, 17098246),
-      createData('Nigeria', 'NG', 200962417, 923768),
-      createData('Brazil', 'BR', 210147125, 8515767),
-    ];
+  
 
 function Customers () {
 
@@ -306,7 +237,7 @@ function Customers () {
                               
                                   <TableCell>Société</TableCell>
                                   <TableCell align='left' style={{ minWidth:110}}>Adresse postal</TableCell>
-                                  <TableCell align='left' style={{ minWidth:160}}>nom responsable</TableCell>
+                                
                                   <TableCell align='left' style={{ minWidth:80}}>Code naf</TableCell>
                                   <TableCell align='left' style={{ minWidth:50}}>Syndicat</TableCell>
                                   <TableCell  align='left' style={{ minWidth:50}}>Interlocuteur</TableCell>
@@ -336,14 +267,14 @@ function Customers () {
                                     
                                     </TableCell>   
 
-                                    <TableCell align='left' style={{ minWidth:50}}>{row.nom_responsable_soc}</TableCell>   
+                                   
 
                                     <TableCell>{row.activite_soc}</TableCell> 
 
                                     <TableCell>{row.syndicat}</TableCell>     
 
                                     <TableCell align='left' style={{ minWidth:50}}>
-                                      <Button startIcon={<FontAwesomeIcon icon={faUser} />} href={`/Interlocuteur/${row.siret}`} variant="outlined" size="small"> Small
+                                      <Button startIcon={<FontAwesomeIcon icon={faUser} />} href={`/Interlocuteur/${row.siret}`} variant="outlined" size="small"> +
                                       </Button>
                                     </TableCell>  
 

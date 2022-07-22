@@ -14,12 +14,19 @@ import StatusCard from '../components/status-card/StatusCard'
 
 import Moment from 'react-moment';
 
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
+import TextField from '@mui/material/TextField';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import 'moment/locale/fr';
 
+import Box from '@mui/material/Box';
 
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+import Stack from '@mui/material/Stack';
 //table class
 
 import Table from '@mui/material/Table';
@@ -36,40 +43,7 @@ import UserService from "../services/user.service";
 import AuthAction from  "../services/Action";
 
 
-const chartOptions = {
-    series: [{
-        name: 'nombre action ',
-        data: [40,70,20,90,36,80,30,91,60]
-    },
-    {
-        name: 'nombre adherent ajouté ',
-        data: [20,40,50,10,46,20,80,71,30]
-    }, {
-        name: 'nombre contrat signé',
-        data: [40, 30, 20, 60, 40, 16, 40, 20, 51]
-    }],
-    options: {
-        color: ['#6ab04c', '#2980b9'],
-        chart: {
-            background: 'transparent'
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth'
-        },
-        xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
-        },
-        legend: {
-            position: 'top'
-        },
-        grid: {
-            show: false
-        }
-    }
-}
+
 
 console.log(AuthAction.findAll)
 
@@ -154,20 +128,9 @@ const Dashboard = () => {
             }
      },[]) 
      const Action_util =Action.filter(task=>task.id_utili===currentUser.id)
+     console.log(Action_util)
     
-//action
-const statusCards =[
-    {
-        "icon": "bx bx-bar-chart-alt",
-        "count": Action.length,
-        "title": "nombres d'action "
-    },
-    {
-        "icon": "bx bx-bar-chart-alt",
-        "count": Action_util.length,
-        "title": "action utilisateur"
-    }
-]
+
 
     const latestOrders = {
         header: [
@@ -195,6 +158,127 @@ const statusCards =[
         </tr>
     ) 
     console.log()
+
+        // date time input field Action
+        const [valueDate1, setValueDate1] = React.useState(new Date());
+        const [valueDate2, setValueDate2] = React.useState(new Date());
+
+        const handleChangeDate1 = (newValue) => {
+            setValueDate1(newValue);
+        };
+        const handleChangeDate2 = (newValue) => {
+            setValueDate2(newValue);
+        };
+
+        const mysn =1000 * 3600 * 24
+        const fltr_date =Action.filter(task=>(( (new Date (task.date_rdv)-valueDate2)/mysn)<0)  &&((new Date (task.date_rdv)-valueDate1)/mysn)>0)
+        const filtre_date_Action_util1 =fltr_date.filter(task=>task.id_utili===currentUser.id)
+        //filter Month action
+            //month jan 
+            const fltrjan =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===0)) )
+             //month fev 
+             const fltrfev =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===1)) )
+              //month mar 
+            const fltrmar =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===2)) )
+             //month jan 
+             const fltravr =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===3)) )
+              //month jan 
+            const fltrmai=Action.filter(task=>(( (new Date (task.date_action)).getMonth()===4)) )
+             //month jan 
+             const fltrjun =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===5)) )
+              //month jan 
+            const fltrjul =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===6)) )
+             //month jan 
+             const fltrout =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===7)) )
+              //month jan 
+            const fltrsep =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===8)) )
+             //month oct 
+             const fltroct =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===9)) )
+              //month nov 
+            const fltrnov =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===10)) )
+             //month dec 
+             const fltrdec =Action.filter(task=>(( (new Date (task.date_action)).getMonth()===11)) )
+
+        //filter Month action
+            //month jan 
+            const fltrSjan =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===0)) )
+             //month fev 
+             const fltrSfev =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===1)) )
+              //month mar 
+            const fltrSmar =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===2)) )
+             //month jan 
+             const fltrSavr =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===3)) )
+              //month jan 
+            const fltrSmai=ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===4)) )
+             //month jan 
+             const fltrSjun =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===5)) )
+              //month jan 
+            const fltrSjul =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===6)) )
+             //month jan 
+             const fltrSout =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===7)) )
+              //month jan 
+            const fltrSsep =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===8)) )
+             //month oct 
+             const fltrSoct =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===9)) )
+              //month nov 
+            const fltrSnov =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===10)) )
+             //month dec 
+             const fltrSdec =ListTest.filter(task=>(( (new Date (task.createdAt)).getMonth()===11)) )
+
+     
+             
+
+
+
+             const chartOptions = {
+                series: [{
+                    name: 'action ',
+                    data: [fltrjan.length,fltrfev.length,fltrmar.length,fltravr.length,fltrmai.length,fltrjun.length,fltrjul.length,fltrout.length,fltrsep.length,fltroct.length,fltrnov.length,fltrdec.length]
+                },
+                {
+                    name: 'sociétées ajouté ',
+                    data: [fltrSjan.length,fltrSfev.length,fltrSmar.length,fltrSavr.length,fltrSmai.length,fltrSjun.length,fltrSjul.length,fltrSout.length,fltrSsep.length,fltrSoct.length,fltrSnov.length,fltrSdec.length]
+                }],
+                options: {
+                    color: ['#6ab04c', '#2980b9'],
+                    chart: {
+                        background: 'transparent'
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth'
+                    },
+                    xaxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','oct','nov','dec']
+                    },
+                    legend: {
+                        position: 'top'
+                    },
+                    grid: {
+                        show: false
+                    }
+                }
+            }
+
+
+       
+
+       
+//action
+const statusCards =[
+    {
+        "icon": "bx bx-bar-chart-alt",
+        "count": fltr_date.length,
+        "title": "nombres d'action "
+    },
+    {
+        "icon": "bx bx-bar-chart-alt",
+        "count": filtre_date_Action_util1.length,
+        "title": "action utilisateur"
+    }
+]
        
     const themeReducer = useSelector(state => state.ThemeReducer.mode)
 
@@ -203,7 +287,48 @@ const statusCards =[
             <div>
                 {currentUser ?(
                     <div>
-                        <h2 className="page-header">tableau de bord</h2>
+                        <h2 className="page-header">tableau de bord 
+                        </h2>
+                        <Box
+                            component="form"
+                            sx={{
+                                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                                <div className="row">
+                                    <div className="col-6">
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                    <Stack spacing={3}>
+                                                        <DesktopDatePicker
+                                                            label="Date debut d'action"
+                                                            value={valueDate1}
+                                                            onChange={handleChangeDate1}
+                                                            renderInput={(params) => <TextField {...params} />}
+                                                            />
+                                                    </Stack>
+                                                </LocalizationProvider>  
+                                            </div>   
+
+                                            <div className="col-6">
+                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                    <Stack spacing={3}>
+                                                        <DesktopDatePicker
+                                                            label="Date fin d'action"
+                                                            value={valueDate2}
+                                                            onChange={handleChangeDate2}
+                                                            renderInput={(params) => <TextField {...params} />}
+                                                            />
+                                                    </Stack>
+                                                </LocalizationProvider>  
+                                            </div>    
+                                        </div>
+                                    </div>  
+                                </div>
+                        </Box>
                         <div className="row">
                             <div className="col-6">
                                 <div className="row">

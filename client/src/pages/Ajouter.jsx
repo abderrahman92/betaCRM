@@ -197,11 +197,7 @@ console.log(SIRETAPI)
                     type="text"
                     className="form-control"
                     id="title"
-                    value={  e.siren ? (
-                      "acrire une valeur"
-                    ) : (
-                      "acrire une valeur"
-                    )}
+                    value={ Societe.siren=e.siren}
                     onChange={handleInputChange}
                     validations={[required,vsiren]}
                     name="siren"

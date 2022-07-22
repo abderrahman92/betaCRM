@@ -81,7 +81,9 @@ const user = AuthService.getCurrentUser()
         console.log(e);
       });
   };
-  console.log(listeinter.data)
+  const filterInter =listeinter.filter(task=>task.id_soc===nb)
+  console.log(filterInter)
+
   
   const saveAction = (e) => {
   
@@ -140,31 +142,38 @@ const handleInputChange = event => {
     return (
         <div className="col-md-12">
   
-          <h1>
-            Ajouter un interlocuteur
-          </h1>
-   
-    
-   {/* ajouter un user */}
-   <div className="card card-container">
-          
-            liste interlocuteur 
-            <TableContainer component={Paper}>
+         
+          <div className="card card-container">
+          <TableContainer component={Paper}>
                                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                         <TableHead>
                                         <TableRow>
                                             <TableCell>nom</TableCell>
-                                            <TableCell align="right">prenom</TableCell>
-                                            <TableCell align="right">fonction</TableCell>
-                                            <TableCell align="right">adresse postal</TableCell>
-                                            <TableCell align="right">telephone</TableCell>
+                                            <TableCell align="left">prenom</TableCell>
+                                            <TableCell align="left">fonction</TableCell>
+                                            <TableCell align="left">adresse postal</TableCell>
+                                            <TableCell align="left">telephone</TableCell>
                                         </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                      
+                                          {filterInter.map((row) => (
+                                              <TableRow key={row.nom}>
+                                                <TableCell>{row.nom}</TableCell> 
+                                                <TableCell>{row.prenom}</TableCell> 
+                                                <TableCell>{row.fonction_inter}</TableCell> 
+                                                <TableCell>{row.adresse}{row.code_postal}</TableCell>        
+                                                <TableCell>{row.tel}</TableCell>    
+                                              </TableRow>
+                                          ))}
                                         </TableBody>
                                     </Table>
-              </TableContainer>
+            </TableContainer>
+          </div>
+    
+   {/* ajouter un user */}
+   <div className="card card-container">
+          <h1> Ajouter un interlocuteur</h1>
+           
             <Form onSubmit={saveAction} ref={form}>
                 {!successful && (
                     <div>

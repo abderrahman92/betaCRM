@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthAction from "../services/Action";
+import AuthInter from "../services/Interlocuteur";
 import AuthService from "../services/auth.service";
 import { useParams } from "react-router-dom";
 import UserService from "../services/user.service";
@@ -35,11 +36,16 @@ import  liste  from "../assets/JsonData/centre-affaire.json";
       const checkBtn = useRef();
       const [ID_societe,setID_societe] = useState([]);
       const [ListeAction,SetAction] = useState([]);
-      const [new_sidbar,setSidbar]=useState(sidebar_items);
-      console.log(props.location);
+      const [new_sidbar,setSidbar]=useState(sidebar_items)
+      const [interlocuteur,setInterlocuteur]=useState([])
+    
       useEffect(()=>{
         const user = AuthService.getCurrentUser();
             if (user){
+                //INTERLOCUTEUR
+                AuthInter.findAll().then((response)=>{
+                  setInterlocuteur(response.data)
+                })
                 //ACTION 
                 AuthAction.findAll().then((response) => {
                   SetAction(response.data)
@@ -71,9 +77,10 @@ import  liste  from "../assets/JsonData/centre-affaire.json";
               
             }
       },[]) 
+
       // Get ID from URL
       const params = useParams();
-      console.log(params)
+  
       var nb=parseInt(params.id);
       
     //aficher sidbar action
@@ -92,83 +99,87 @@ import  liste  from "../assets/JsonData/centre-affaire.json";
         const land =(e) => {
           setactive(Array.isArray(e)?e.map(x=>x.NOM):[])
         }
-
-    
+        //filter action where siret
         const actItem =ID_societe.filter(task=>task.siret===nb)
- 
-    //intitial Action 
-        const initial1ctionState = {
-        id_utili:"",
-        nom_interlocuteur: "",
-        type_action:"",
-        nom_societe: "",
-        description: "",
-        date_action: "",
-        date_rdv: "", 
-        };
-
-      //ajouter l'action      
-        const [Action, setAction] = useState({initial1ctionState});
-        const saveAction = (e) => {
-          var data = {
-              nom_interlocuteur:Action.nom_interlocuteur,
-              nom_societe:actItem[0].nom_soc,
-              date_rdv:Action.date_rdv,
-              date_action: new Date(),
-              id_utili:user.id,
-              type_action:Action.type_action,
-              description:Action.description,
+        //filter interlocuteur where siret
+        const filterInter =interlocuteur.filter(task=>task.id_soc===nb)
+        console.log(filterInter)
+        
 
 
-            
-            };
-          e.preventDefault();
-          form.current.validateAll();
-            if (checkBtn.current.context._errors.length === 0) {
-              AuthAction.create(data)
-                .then(response => {
-                  setAction({
-                  nom_interlocuteur:response.data.nom_interlocuteur,
-                  nom_societe: response.data.nom_societe,
-                  date_rdv: response.data.date_rdv,
-                  date_action: response.data.date_action,
-                  id_utili: response.data.id_utili,
-                  type_action: response.data.type_action,
-                  description: response.data.description,
-                  
-                  }
-                  );
-                  setSuccessful(true);
-                  setMessage(response.data.message)
-                },
-                error => {
-                  const resMessage =
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                error.message ||
-                error.toString();
-              setMessage(resMessage);
+          //intitial Action 
+              const initial1ctionState = {
+              id_utili:"",
+              nom_interlocuteur: "",
+              type_action:"",
+              nom_societe: "",
+              description: "",
+              date_action: "",
+              date_rdv: "", 
+              };
+
+          //ajouter l'action      
+            const [Action, setAction] = useState({initial1ctionState});
+            const saveAction = (e) => {
+              var data = {
+                  nom_interlocuteur:Action.nom_interlocuteur,
+                  nom_societe:actItem[0].nom_soc,
+                  date_rdv:Action.date_rdv,
+                  date_action: new Date(),
+                  id_utili:user.id,
+                  type_action:Action.type_action,
+                  description:Action.description,
+
+
+                
+                };
+              e.preventDefault();
+              form.current.validateAll();
+                if (checkBtn.current.context._errors.length === 0) {
+                  AuthAction.create(data)
+                    .then(response => {
+                      setAction({
+                      nom_interlocuteur:response.data.nom_interlocuteur,
+                      nom_societe: response.data.nom_societe,
+                      date_rdv: response.data.date_rdv,
+                      date_action: response.data.date_action,
+                      id_utili: response.data.id_utili,
+                      type_action: response.data.type_action,
+                      description: response.data.description,
+                      
+                      }
+                      );
+                      setSuccessful(true);
+                      setMessage(response.data.message)
+                    },
+                    error => {
+                      const resMessage =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  setMessage(resMessage);
+                    }
+                    )
+                    .catch(e => {
+                      console.log(e);
+
+                    });
                 }
-                )
-                .catch(e => {
-                  console.log(e);
+            };
+            const handleInputChange = event => {
+              const { name, value } = event.target;
+              setAction({ ...Action, [name]: value });
 
-                });
-            }
-        };
-        const handleInputChange = event => {
-          const { name, value } = event.target;
-          setAction({ ...Action, [name]: value });
-
-        };
-      //liste type action  
-        const options = [
-          { value: 'RDV', label: 'RDV' },
-          { value: 'contact téléphonique', label: 'contact téléphonique' },
-          { value: 'contact teams', label: 'contact teams' },
-          { value: 'contact par courrier', label: 'contact par courrier' }
-        ]
+            };
+          //liste type action  
+            const options = [
+              { value: 'RDV', label: 'RDV' },
+              { value: 'contact téléphonique', label: 'contact téléphonique' },
+              { value: 'contact teams', label: 'contact teams' },
+              { value: 'contact par courrier', label: 'contact par courrier' }
+            ]
 
       return (
        <div className="col-md-12">
@@ -259,15 +270,20 @@ import  liste  from "../assets/JsonData/centre-affaire.json";
 
                               <div className="form-group">
                                 <label htmlFor="email">nom de l'interlocuteur</label>
-                                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                                  <TextField
-                                    id="outlined-multiline-static"
-                                    label="nom de l'interlocuteur"
-                                    multiline
-                                    name="nom_interlocuteur"
-                                    value={Action.nom_interlocuteur}
-                                    onChange={handleInputChange}
-                                  />
+                                <FormControl fullWidth >
+                                <InputLabel id="demo-simple-select-label">nom de l'interlocuteur</InputLabel>
+                                <Select
+                                          labelId="demo-simple-select-label"
+                                          id="demo-simple-select"
+                                          value={Action.nom_interlocuteur}
+                                          label="nom_interlocuteur"
+                                          name="nom_interlocuteur"
+                                          onChange={handleInputChange}
+                                        >
+                                            {filterInter.map((e)=>(
+                                          <MenuItem value={e.nom}>{e.nom} {e.prenom}</MenuItem>
+                                            ))}
+                                        </Select>
                                 </FormControl>
                               </div>    
 
@@ -275,12 +291,12 @@ import  liste  from "../assets/JsonData/centre-affaire.json";
                                 <label htmlFor="password">type d'action</label>
 
                                       <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">type_action</InputLabel>
                                         <Select
                                           labelId="demo-simple-select-label"
                                           id="demo-simple-select"
                                           value={Action.type_action}
-                                          label="Age"
+                                          label="type_action"
                                           name="type_action"
                                           onChange={handleInputChange}
                                         >
